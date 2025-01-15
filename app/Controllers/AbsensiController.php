@@ -11,12 +11,20 @@ class AbsensiController extends BaseController
 {
     public function setAbsensi()
     {
+        $jwt = $this->request->getVar("qrcode");
+
+        $qrcode = new QRCode();
+
+        if ($qrcode->orderBy("id_qrcode", "DESC")->first()->key_qrcode != $jwt) {
+            return $this->fail("QRCode invalid/expire");
+        };
+
         $absensi = new Absensi();
         $time = time();
 
         $absensiBefore = $absensi->where('tanggal', date("Y-m-d", $time));
         if ($absensiBefore) {
-            return $this->fail("Anda sudah hari ini");
+            return $this->fail("Anda sudah absen hari ini");
         }
 
         $id_user = $this->request->getVar("id_user");
