@@ -12,7 +12,7 @@ class Absensi extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id_user", "status", "mood", "reason", "tanggal"];
+    protected $allowedFields    = ["id_user", "status", "mood", "reason", "tanggal", "timestamp"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

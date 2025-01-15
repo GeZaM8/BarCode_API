@@ -34,6 +34,7 @@ class AbsensiController extends BaseController
 
         $tanggal = date("Y-m-d", $time);
         $timestamp = date("H:i:s", $time);
+        // return $this->respond(["tanggal" => $tanggal, "timestamp" => $timestamp]);
 
         $data = [
             'id_user' => $id_user,
