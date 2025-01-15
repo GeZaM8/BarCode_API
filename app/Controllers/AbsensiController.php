@@ -22,7 +22,7 @@ class AbsensiController extends BaseController
         $absensi = new Absensi();
         $time = time();
 
-        $absensiBefore = $absensi->where('tanggal', date("Y-m-d", $time));
+        $absensiBefore = $absensi->where('tanggal', date("Y-m-d", $time))->first();
         if ($absensiBefore) {
             return $this->fail("Anda sudah absen hari ini");
         }
