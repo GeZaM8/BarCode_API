@@ -11,15 +11,9 @@ class AbsensiController extends BaseController
 {
     public function setAbsensi()
     {
-        $jwt = $this->request->getVar("qrcode");
-
-        $qrcode = new QRCode();
         $absensi = new Absensi();
         $time = time();
 
-        if ($qrcode->first()->key_qrcode != $jwt) {
-            return $this->fail("QRCode sudah expire/invalid");
-        }
         $absensiBefore = $absensi->where('tanggal', date("Y-m-d", $time));
         if ($absensiBefore) {
             return $this->fail("Anda sudah hari ini");
@@ -66,5 +60,17 @@ class AbsensiController extends BaseController
         }, @$absensiUser);
 
         return $this->respond($absensiUser);
+    }
+
+    public function validateQRCode()
+    {
+        $jwt = $this->request->getVar("qrcode");
+
+        $qrcode = new QRCode();
+
+        if ($qrcode->orderBy("id_qrcode", "DESC")->first()->key_qrcode != $jwt) {
+            return $this->fail("QRCode invalid/expire");
+        }
+        return $this->respond(["messages" => "Anda berhasil melakukan absensi"]);
     }
 }

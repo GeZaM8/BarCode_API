@@ -14,6 +14,7 @@ $routes->group('/', ['filter' => "api"], static function ($routes) {
 
     $routes->post("/login", [Auth::class, "login"]);
     $routes->post("/absensi", [AbsensiController::class, "setAbsensi"]);
+    $routes->post("/validate/qrcode", [AbsensiController::class, "validateQRCode"]);
 
     $routes->get("/absensi/(:num)", [AbsensiController::class, "getAbsensi/$1"]);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
