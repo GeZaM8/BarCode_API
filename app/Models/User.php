@@ -43,4 +43,14 @@ class User extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getUserJoin()
+    {
+        $builder = $this
+            ->join("detailusers", "detailusers.id_user = users.id_user", "left")
+            ->join("kelas", "kelas.id_kelas = detailusers.id_kelas", "left")
+            ->join("jurusan", "jurusan.kode_jurusan = detailusers.kode_jurusan", "left")
+            ->join("user_roles", "user_roles.id_role = detailusers.id_role", "left");
+        return $builder;
+    }
 }
