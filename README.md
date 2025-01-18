@@ -1,3 +1,3 @@
 # BarCode API
 
-api for BarCode Mobile App
+Api for BarCode Mobile App
