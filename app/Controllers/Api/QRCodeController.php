@@ -1,18 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use chillerlan\QRCode\Common\EccLevel;
-use chillerlan\QRCode\Data\QRMatrix;
-use chillerlan\QRCode\Output\QROutputInterface;
 use chillerlan\QRCode\QRCode;
-use chillerlan\QRCode\QROptions;
 use Faker\Factory;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use QRSvgWithLogo;
-use SVGWithLogoOptions;
 
 class QRCodeController extends BaseController
 {

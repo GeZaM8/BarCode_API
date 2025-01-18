@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\Absensi;
 use App\Models\QRCode;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class AbsensiController extends BaseController
 {
