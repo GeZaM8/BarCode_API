@@ -3,6 +3,8 @@
 namespace Config;
 
 use App\Filters\APIFilter;
+use App\Filters\DashboardFilter;
+use App\Filters\UserAccessFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -36,6 +38,8 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'api'           => APIFilter::class,
+        'DashboardAccess' => DashboardFilter::class,
+        'UserAccess'      => UserAccessFilter::class,
     ];
 
     /**

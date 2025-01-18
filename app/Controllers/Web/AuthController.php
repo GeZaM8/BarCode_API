@@ -24,7 +24,11 @@ class AuthController extends BaseController
             return redirect()->back()->with('error', ['Username or Password is wrong']);
 
         if ($user->password == $password) {
-            return redirect()->to("dashboard");
+            session()->set('auth_login', [
+                "id" => $user->id_user,
+                "email" => $user->email
+            ]);
+            return redirect()->back();
         }
     }
 }

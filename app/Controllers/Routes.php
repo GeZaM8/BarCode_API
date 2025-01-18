@@ -33,10 +33,12 @@ $routes->group('/', ['filter' => "api"], static function ($routes) {
 // Web Route
 //============================================//
 
-$routes->group("web", static function ($routes) {
-    $routes->get('/', [AuthController::class, "login_page"]);
+$routes->group("web", static function (RouteCollection $routes) {
+    $routes->get('/', [AuthController::class, "login_page"], ['filter' => 'UserAccess']);
     $routes->post('login', [AuthController::class, "login"]);
 
-    $routes->get("admin", [HomeController::class, "index"]);
+    $routes->group("admin", ['filter' => 'DashboardAccess:3'], static function (RouteCollection $routes) {
+        $routes->get("/", [HomeController::class, "index"]);
+    });
     $routes->get("qrcode", [QRCodeController::class, "index"]);
 });
