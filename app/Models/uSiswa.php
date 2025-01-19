@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class USiswa extends Model
 {
     protected $table            = 'u_siswa';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_user';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;

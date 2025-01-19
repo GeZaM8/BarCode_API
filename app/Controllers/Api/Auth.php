@@ -28,41 +28,31 @@ class Auth extends BaseController
 
     public function registerSiswa()
     {
-        $email = $this->request->getVar("email");
-        $password = $this->request->getVar("password");
-
-        $nama = $this->request->getVar("nama");
-        $kelas = $this->request->getVar("kelas");
-        $kode_jusursan = $this->request->getVar("kode_jurusan");
-        $no_absen = $this->request->getVar("no_absen");
-        $nis = $this->request->getVar("nis");
-        $nisn = $this->request->getVar("nisn");
-
         $dataUser = [
-            "email" => $email,
-            "password" => $password,
+            "email" => $this->request->getVar("email"),
+            "password" => $this->request->getVar("password"),
             "id_role" => "1"
         ];
 
-        $userModel = new User();
-
         $db = \Config\Database::connect();
         $db->transBegin();
+
+        $userModel = new User();
+        $siswaModel = new USiswa();
 
         $insertUser = $userModel->insert($dataUser);
 
         if ($insertUser) {
             $dataSiswa = [
                 "id_user" => $insertUser,
-                "nama" => $nama,
-                "kelas" => $kelas,
-                "kode_jurusan" => $kode_jusursan,
-                "no_absen" > $no_absen,
-                "nis" => $nis,
-                "nisn" => $nisn
+                "nama" => $this->request->getVar("nama"),
+                "kelas" => $this->request->getVar("kelas"),
+                "kode_jurusan" => $this->request->getVar("kode_jurusan"),
+                "no_absen" > $this->request->getVar("no_absen"),
+                "nis" => $this->request->getVar("nis"),
+                "nisn" => $this->request->getVar("nisn")
             ];
 
-            $siswaModel = new USiswa();
             $insertSiswa = $siswaModel->insert($dataSiswa);
 
             if ($insertSiswa) {
@@ -70,7 +60,7 @@ class Auth extends BaseController
                 return $this->respond(['messages' => "Register Berhasil"]);
             } else {
                 $db->transRollback();
-                return $this->fail("NIS, NISN, atau Nomor Absen Terdaftar");
+                return $this->fail("NIS, NISN, atau Nomor Absen sudah Terdaftar");
             }
         } else {
             $db->transRollback();
