@@ -109,6 +109,7 @@
         kelas
       });
 
+      $('#day').html('<option selected disabled>Select Month First</option>');
       $('#month').html('<option selected disabled>Select Month</option>');
       $('#month').append('<option value="<?= date('m') ?>">This Month</option>');
       for (let i = 1; i <= 12; i++) {
