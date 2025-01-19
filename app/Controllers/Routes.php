@@ -3,6 +3,7 @@
 use App\Controllers\Api\AbsensiController;
 use App\Controllers\Api\Auth;
 use App\Controllers\Api\QRCodeController;
+use App\Controllers\Api\UserController;
 use App\Controllers\Web\AuthController;
 use App\Controllers\Web\Dashboard\HomeController;
 use App\Controllers\Web\Home;
@@ -20,7 +21,7 @@ $routes->get('/', static function () {
 // Api Route
 //============================================//
 
-$routes->group('/', ['filter' => "api"], static function ($routes) {
+$routes->group('/', ['filter' => "api"], static function (RouteCollection $routes) {
     $routes->post("/login", [Auth::class, "login"]);
     $routes->post("/register", [Auth::class, "registerSiswa"]);
     $routes->post("/absensi", [AbsensiController::class, "setAbsensi"]);
@@ -28,6 +29,8 @@ $routes->group('/', ['filter' => "api"], static function ($routes) {
 
     $routes->get("/absensi/(:num)", [AbsensiController::class, "getAbsensi/$1"]);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
+
+    $routes->patch("/update/siswa", [UserController::class, "updateUser"]);
 });
 
 //============================================//
