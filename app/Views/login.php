@@ -1,11 +1,11 @@
-<?= $this->extend('layout/main') ?>
+<?= $this->extend('layout/template') ?>
 
 <?= $this->section('body') ?>
 
 
 <div class="container">
   <div class="row">
-    <div class="pt-5 col-4 mx-auto">
+    <div class="pt-5 col-md-8 col-lg-4 mx-auto">
 
       <?php
       if (session()->has("error")) {
@@ -21,7 +21,7 @@
       ?>
       <form class="card" method="POST" action="/web/login">
         <div class="card-body">
-          <img src="/img/logo-icon.png" class="img-fluid mb-4" alt="BarCode Logo">
+          <img src="/img/logo-icon.png" class="mb-4 mx-auto d-block" style="width: 60%; aspect-ratio: 1;" alt="BarCode Logo">
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
