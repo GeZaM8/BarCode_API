@@ -38,7 +38,7 @@ class DashboardFilter implements FilterInterface
         }
 
         $user = new User();
-        $userLogged = $user->getUserJoin()->where("users.id_user", $userSession['id'])->first();
+        $userLogged = $user->where("users.id_user", $userSession['id'])->first();
 
         $accessRoleCheck = false;
         if ($roles) {

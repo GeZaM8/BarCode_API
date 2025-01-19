@@ -30,7 +30,7 @@ class UserAccessFilter implements FilterInterface
         if ($userSession && is_array($userSession)) {
             if (isset($userSession['id']) || isset($userSession['email'])) {
                 $user = new User();
-                $userLogged = $user->getUserJoin()->where("users.id_user", $userSession['id'])->first();
+                $userLogged = $user->where("users.id_user", $userSession['id'])->first();
 
                 switch ($userLogged->id_role) {
                     case 1:

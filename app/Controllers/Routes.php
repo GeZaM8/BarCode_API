@@ -5,8 +5,8 @@ use App\Controllers\Api\Auth;
 use App\Controllers\Api\QRCodeController;
 use App\Controllers\Api\UserController;
 use App\Controllers\Web\AuthController;
-use App\Controllers\Web\Dashboard\HomeController;
-use App\Controllers\Web\Home;
+use App\Controllers\Web\Dashboard\AdminController;
+use App\Controllers\Web\Dashboard\TeacherController;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -42,10 +42,13 @@ $routes->group("web", static function (RouteCollection $routes) {
     $routes->post('login', [AuthController::class, "login"]);
 
     $routes->group("admin", ['filter' => 'DashboardAccess:3'], static function (RouteCollection $routes) {
-        $routes->get("/", [HomeController::class, "index"]);
+        $routes->get("/", [AdminController::class, "index"]);
+        $routes->get("presence", [AdminController::class, "presence"]);
+        $routes->get("logout", [AdminController::class, "logout"]);
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
-        $routes->get("/", [HomeController::class, "index"]);
+        $routes->get("/", [TeacherController::class, "index"]);
+        $routes->get("logout", [TeacherController::class, "logout"]);
     });
 });
 $routes->get("qrcode", [QRCodeController::class, "index"], ['filter' => 'DashboardAccess:2,3']);
