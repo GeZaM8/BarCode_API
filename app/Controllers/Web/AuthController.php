@@ -21,7 +21,7 @@ class AuthController extends BaseController
         $user = $userModel->where('email', $email)->first();
 
         if (!$user)
-            return redirect()->back()->with('error', ['Username or Password is wrong']);
+            return redirect()->back()->with('error', ['Email atau Password salah']);
 
         if ($user->password == $password) {
             session()->set('auth_login', [
@@ -31,6 +31,6 @@ class AuthController extends BaseController
             return redirect()->back();
         }
 
-        return redirect()->back()->with('error', ['Username or Password is wrong']);
+        return redirect()->back()->with('error', ['Email atau Password salah']);
     }
 }

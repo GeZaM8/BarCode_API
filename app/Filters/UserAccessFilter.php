@@ -35,7 +35,7 @@ class UserAccessFilter implements FilterInterface
                 switch ($userLogged->id_role) {
                     case 1:
                         session()->remove("auth_login");
-                        return redirect()->to("/web")->with("error", ["Sorry, Student can only login using mobile app"]);
+                        return redirect()->to("/web")->with("error", ["Maaf, Siswa hanya dapat mengakses akun menggunakan aplikasi mobile"]);
                         break;
                     case 2:
                         return redirect()->to("/web/teacher");

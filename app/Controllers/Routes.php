@@ -37,6 +37,8 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
 // Web Route
 //============================================//
 
+$routes->get("qrcode", [QRCodeController::class, "index"], ['filter' => 'DashboardAccess:2,3']);
+
 $routes->group("web", static function (RouteCollection $routes) {
     $routes->get('/', [AuthController::class, "login_page"], ['filter' => 'UserAccess']);
     $routes->post('login', [AuthController::class, "login"]);
@@ -45,10 +47,13 @@ $routes->group("web", static function (RouteCollection $routes) {
         $routes->get("/", [AdminController::class, "index"]);
         $routes->get("presence", [AdminController::class, "presence"]);
         $routes->get("logout", [AdminController::class, "logout"]);
+
+        $routes->group("api", static function (RouteCollection $routes) {
+            $routes->get("get-presence", [AdminController::class, "getPresence"]);
+        });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
         $routes->get("/", [TeacherController::class, "index"]);
         $routes->get("logout", [TeacherController::class, "logout"]);
     });
 });
-$routes->get("qrcode", [QRCodeController::class, "index"], ['filter' => 'DashboardAccess:2,3']);

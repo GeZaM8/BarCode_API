@@ -40,6 +40,9 @@ $baseUrl = "/web/admin";
   <?= $this->renderSection('content'); ?>
 </div>
 
+<?= $this->endSection(); ?>
 
-
+<?= $this->section('scripts'); ?>
+<script src="/scripts/jquery-3.7.1.min.js"></script>
+<?= $this->renderSection('scripts'); ?>
 <?= $this->endSection(); ?>

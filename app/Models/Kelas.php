@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Absensi extends Model
+class Kelas extends Model
 {
-    protected $table            = 'absensi';
-    protected $primaryKey       = 'id';
+    protected $table            = 'kelas';
+    protected $primaryKey       = 'kelas';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id_user", "status", "mood", "reason", "tanggal", "timestamp"];
+    protected $allowedFields    = ["kelas"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,10 +43,4 @@ class Absensi extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function withDetailUsers()
-    {
-        return $this->join('users', 'users.id_user = absensi.id_user')
-            ->join('u_siswa', 'u_siswa.id_user = absensi.id_user');
-    }
 }
