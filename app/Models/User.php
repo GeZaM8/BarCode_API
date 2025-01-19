@@ -44,13 +44,26 @@ class User extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getUserJoin()
+    public function getUsersWithDetails()
     {
-        $builder = $this
-            ->join("user_roles", "user_roles.id_role = users.id_role", "left")
-            ->join("u_siswa", "u_siswa.id_user = users.id_user AND users.id_role = 1", "left")
-            ->join("jurusan", "jurusan.kode_jurusan = u_siswa.kode_jurusan AND users.id_role = 1", "left")
-            ->join("u_guru", "u_guru.id_user = users.id_user AND users.id_role = 2", "left");
-        return $builder;
+        $db = $this->db;
+
+        // Subquery untuk siswa
+        $siswaQuery = $db->table('u_siswa d')
+            ->select("id_user, 1 as id_role, nama, kelas, kode_jurusan, no_absen, nis, nisn, NULL as nip");
+
+        // Subquery untuk teacher
+        $teacherQuery = $db->table('u_guru d')
+            ->select("id_user, 2 as id_role, nama, NULL as kelas, NULL as kode_jurusan, NULL as no_absen, NULL as nis, NULL as nisn, nip");
+
+        // Gabungkan dengan UNION
+        $unionQuery = $siswaQuery->getCompiledSelect() . " UNION ALL " . $teacherQuery->getCompiledSelect();
+
+        // Query utama
+        $query = $db->table('users u')
+            ->select('u.*, d.*')
+            ->join("($unionQuery) d", 'u.id_user = d.id_user AND u.id_role = d.id_role', 'left');
+
+        return $query;
     }
 }
