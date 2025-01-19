@@ -7,5 +7,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class HomeController extends BaseController
 {
-    public function index() {}
+    public function index()
+    {
+        // session()->destroy();
+    }
 }

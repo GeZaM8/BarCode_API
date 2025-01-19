@@ -40,5 +40,8 @@ $routes->group("web", static function (RouteCollection $routes) {
     $routes->group("admin", ['filter' => 'DashboardAccess:3'], static function (RouteCollection $routes) {
         $routes->get("/", [HomeController::class, "index"]);
     });
+    $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
+        $routes->get("/", [HomeController::class, "index"]);
+    });
 });
 $routes->get("qrcode", [QRCodeController::class, "index"], ['filter' => 'DashboardAccess:2,3']);

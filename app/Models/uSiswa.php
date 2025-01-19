@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class User extends Model
+class uSiswa extends Model
 {
-    protected $table            = 'users';
-    protected $primaryKey       = 'id_user';
+    protected $table            = 'detailusers';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'object';
+    protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["email", "password"];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,14 +43,4 @@ class User extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getUserJoin()
-    {
-        $builder = $this
-            ->join("user_roles", "user_roles.id_role = users.id_role", "left")
-            ->join("u_siswa", "u_siswa.id_user = users.id_user AND users.id_role = 1", "left")
-            ->join("jurusan", "jurusan.kode_jurusan = u_siswa.kode_jurusan AND users.id_role = 1", "left")
-            ->join("u_guru", "u_guru.id_user = users.id_user AND users.id_role = 2", "left");
-        return $builder;
-    }
 }

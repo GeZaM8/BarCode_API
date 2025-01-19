@@ -13,7 +13,7 @@ class Auth extends BaseController
         $password = $this->request->getVar("password");
 
         $userModel = new User();
-        $user = $userModel->getUserJoin()->where("email", $email)->first();
+        $user = $userModel->getUserJoinSiswa()->where("email", $email)->first();
 
         if (!$user)
             return $this->fail(messages: "Email atau Password Salah");

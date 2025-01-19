@@ -30,5 +30,7 @@ class AuthController extends BaseController
             ]);
             return redirect()->back();
         }
+
+        return redirect()->back()->with('error', ['Username or Password is wrong']);
     }
 }

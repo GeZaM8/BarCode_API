@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Detailusers extends Model
+class UGuru extends Model
 {
-    protected $table            = 'detailusers';
+    protected $table            = 'u_guru';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
