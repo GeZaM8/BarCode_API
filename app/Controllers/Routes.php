@@ -22,6 +22,7 @@ $routes->get('/', static function () {
 
 $routes->group('/', ['filter' => "api"], static function ($routes) {
     $routes->post("/login", [Auth::class, "login"]);
+    $routes->post("/register", [Auth::class, "registerSiswa"]);
     $routes->post("/absensi", [AbsensiController::class, "setAbsensi"]);
     $routes->post("/validate/qrcode", [AbsensiController::class, "validateQRCode"]);
 

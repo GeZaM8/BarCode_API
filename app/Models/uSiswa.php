@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class uSiswa extends Model
+class USiswa extends Model
 {
-    protected $table            = 'detailusers';
+    protected $table            = 'u_siswa';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ["id_user", "nama", "kelas", "kode_jurusan", "no_absen", "nis", "nisn"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
