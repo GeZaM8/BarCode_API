@@ -63,12 +63,22 @@
 <?= $this->section('scripts'); ?>
 <script>
   $(document).ready(function() {
-    function requestBackend(data = {}) {
+    function requestBackend() {
+      let year = $('#year').val();
+      let month = $('#month').val();
+      let day = $('#day').val();
+      let kelas = $('#class').val();
+
       $.ajax({
         url: '<?= admin_url('api/get-presence') ?>',
         method: 'GET',
         dataType: 'json',
-        data: data,
+        data: {
+          year,
+          month,
+          day,
+          kelas
+        },
         beforeSend: function() {
           $('#loading').removeClass("d-none");
         },
@@ -98,69 +108,33 @@
     requestBackend();
 
     $('#year').on('change', function() {
-      let year = $(this).val();
-      let month = $('#month').val();
-      let day = $('#day').val();
-      let kelas = $('#class').val();
-      requestBackend({
-        year,
-        month,
-        day,
-        kelas
-      });
-
       $('#day').html('<option selected disabled>Select Month First</option>');
       $('#month').html('<option selected disabled>Select Month</option>');
       $('#month').append('<option value="<?= date('m') ?>">This Month</option>');
       for (let i = 1; i <= 12; i++) {
         $('#month').append(`<option value="${i}">${i}</option>`);
       }
+
+      requestBackend();
     })
 
     $('#month').on('change', function() {
-      let year = $('#year').val();
-      let month = $(this).val();
-      let day = $('#day').val();
-      let kelas = $('#class').val();
-      requestBackend({
-        year,
-        month,
-        day,
-        kelas
-      });
-
       $('#day').html('<option selected disabled>Select Day</option>');
       $('#day').append('<option value="<?= date('d') ?>">This Day</option>');
-      const totalDay = new Date(year, month, 0).getDate();
+      const totalDay = new Date($('#year').val(), $('#month').val(), 0).getDate();
       for (let i = 1; i <= totalDay; i++) {
         $('#day').append(`<option value="${i}">${i}</option>`);
       }
+
+      requestBackend();
     })
 
     $('#day').on('change', function() {
-      let year = $('#year').val();
-      let month = $('#month').val();
-      let day = $(this).val();
-      let kelas = $('#class').val();
-      requestBackend({
-        year,
-        month,
-        day,
-        kelas
-      });
+      requestBackend();
     })
 
     $('#class').on('change', function() {
-      let year = $('#year').val();
-      let month = $('#month').val();
-      let day = $('#day').val();
-      let kelas = $(this).val();
-      requestBackend({
-        year,
-        month,
-        day,
-        kelas
-      });
+      requestBackend();
     })
   });
 </script>
