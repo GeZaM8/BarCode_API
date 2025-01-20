@@ -20,6 +20,12 @@ class UserController extends BaseController
         $nis = $this->request->getVar("nis");
         $nisn = $this->request->getVar("nisn");
 
+        $img = $this->request->getFile("foto");
+
+        $newName = $img->getRandomName();
+        $img->move(APPPATH . "public/upload", $newName);
+
+        return $this->respond(["foto" => $img->getName()]);
         $dataUser = [
             "email" => $email
         ];

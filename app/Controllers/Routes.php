@@ -30,7 +30,7 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
     $routes->get("/absensi/(:num)", [AbsensiController::class, "getAbsensi/$1"]);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
 
-    $routes->patch("/update/siswa", [UserController::class, "updateUser"]);
+    $routes->post("/update/siswa", [UserController::class, "updateUser"]);
 });
 
 //============================================//
