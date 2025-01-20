@@ -57,7 +57,7 @@ class User extends Model
         $unionQuery = $siswaQuery->getCompiledSelect() . " UNION ALL " . $teacherQuery->getCompiledSelect();
 
         $query = $db->table('users u')
-            ->select('u.*, d.id_role, d.nama, d.kelas, d.kode_jurusan, d.no_absen, d.nis, d.nisn, d.nip, r.name_role, k.kelas as kelas_name')
+            ->select('u.*, d.id_role, d.nama, d.id_kelas, d.kode_jurusan, d.no_absen, d.nis, d.nisn, d.nip, r.name_role, k.kelas')
             ->join("($unionQuery) d", 'u.id_user = d.id_user AND u.id_role = d.id_role', 'left')
             ->join("user_roles r", 'u.id_role = r.id_role', 'left')
             ->join("kelas k", "k.id_kelas = d.id_kelas", "left");

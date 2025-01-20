@@ -47,6 +47,7 @@ class Absensi extends Model
     public function withDetailUsers()
     {
         return $this->join('users', 'users.id_user = absensi.id_user')
-            ->join('u_siswa', 'u_siswa.id_user = absensi.id_user');
+            ->join('u_siswa', 'u_siswa.id_user = absensi.id_user')
+            ->join('kelas', 'kelas.id_kelas = u_siswa.id_kelas');
     }
 }
