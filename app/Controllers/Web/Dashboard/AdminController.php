@@ -35,8 +35,8 @@ class AdminController extends BaseController
         return view('dashboard/admin_presence', [
             'title' => 'Admin',
             'current_page' => 'presence',
-            'start_year' => $data_yer->start_year,
-            'end_year' => $data_yer->end_year,
+            'start_year' => $data_yer->start_year ?? date("Y"),
+            'end_year' => $data_yer->end_year ?? date("Y"),
             'class' => $class,
         ]);
     }
