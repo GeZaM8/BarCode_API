@@ -46,6 +46,7 @@ $routes->group("web", static function (RouteCollection $routes) {
     $routes->group("admin", ['filter' => 'DashboardAccess:3'], static function (RouteCollection $routes) {
         $routes->get("/", [AdminController::class, "index"]);
         $routes->get("presence", [AdminController::class, "presence"]);
+        $routes->get("users", [AdminController::class, "users"]);
         $routes->get("logout", [AdminController::class, "logout"]);
 
         $routes->group("api", static function (RouteCollection $routes) {

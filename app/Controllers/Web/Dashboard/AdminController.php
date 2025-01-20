@@ -81,6 +81,14 @@ class AdminController extends BaseController
         return $this->respond($payload);
     }
 
+    public function users()
+    {
+        return view('dashboard/admin_users', [
+            'title' => 'Admin',
+            'current_page' => 'users',
+        ]);
+    }
+
     public function logout()
     {
         session()->destroy();

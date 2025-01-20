@@ -18,7 +18,10 @@
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-  <button class="btn btn-sm btn-primary" id="filter">Reset Filter</button>
+  <div class="d-flex gap-2 ">
+    <button class="btn btn-sm btn-primary" id="filter">Reset Filter</button>
+    <button class="btn btn-sm btn-success" id="refresh">Refresh</button>
+  </div>
 </div>
 <div class="row mb-2">
   <div class="col-md-3 mb-3">
@@ -97,14 +100,16 @@
           kelas
         },
         beforeSend: function() {
+          $('#filter').attr('disabled', true);
+          $('#refresh').attr('disabled', true);
           $('#loading').removeClass("d-none");
         },
         complete: function() {
+          $('#filter').attr('disabled', false);
+          $('#refresh').attr('disabled', false);
           $('#loading').addClass("d-none");
         },
         success: function(data) {
-          console.log(data);
-
           let student = data.student;
           let presence = data.presence;
 
@@ -115,6 +120,7 @@
               return {
                 ...item,
                 ...presenceCheck,
+                tanggal: presenceCheck ? presenceCheck.tanggal : "<?= date('Y-m-d') ?>",
                 status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
               }
             })
@@ -200,6 +206,7 @@
     })
 
     $('#filter').on('click', defaultFilter)
+    $('#refresh').on('click', requestBackend)
 
   });
 </script>
