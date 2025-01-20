@@ -9,12 +9,14 @@ class AdminController extends BaseController
 {
     protected $absenModel;
     protected $kelasModel;
+    protected $userModel;
 
     public function __construct()
     {
         helper('weburl');
         $this->absenModel = new \App\Models\Absensi();
         $this->kelasModel = new \App\Models\Kelas();
+        $this->userModel = new \App\Models\User();
     }
 
     public function index()
@@ -46,7 +48,17 @@ class AdminController extends BaseController
         $day = $this->request->getVar('day');
         $class = $this->request->getVar('kelas');
 
+        if ($year && $month && $day) {
+            $userFilter = $this->userModel->getUsersWithDetails()->where("u.id_role", "1");
+
+            if ($class) {
+                $userFilter->where("kelas", $class);
+            }
+            $userFilter = $userFilter->orderBy('kelas', "ASC")->orderBy("no_absen", "ASC")->get()->getResultObject();
+        }
+
         $result = $this->absenModel->withDetailUsers()->select("*, month(tanggal) as bulan, year(tanggal) as tahun");
+
 
         if ($year) {
             $result->where("year(tanggal)", $year);
@@ -61,7 +73,12 @@ class AdminController extends BaseController
             $result->where("kelas", $class);
         }
 
-        return $this->respond($result->findAll());
+        $payload = [
+            "student" => $userFilter ?? [],
+            "presence" => $result->orderBy('kelas', "ASC")->orderBy("tanggal", "DESC")->orderBy("no_absen", "ASC")->findAll(),
+        ];
+
+        return $this->respond($payload);
     }
 
     public function logout()

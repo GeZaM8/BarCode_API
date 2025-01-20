@@ -22,6 +22,15 @@
 </div>
 <div class="row mb-2">
   <div class="col-md-3 mb-3">
+    <label for="class" class="form-label">Class</label>
+    <select class="form-select" aria-label="Select Class" id="class">
+      <option selected disabled>Select Class</option>
+      <?php foreach ($class as $c): ?>
+        <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <div class="col-md-3 mb-3">
     <label for="year" class="form-label">Year</label>
     <select class="form-select" aria-label="Select Year" id="year">
       <option selected disabled>Select Year</option>
@@ -42,15 +51,7 @@
       <option selected disabled>Select Month First</option>
     </select>
   </div>
-  <div class="col-md-3 mb-3">
-    <label for="class" class="form-label">Class</label>
-    <select class="form-select" aria-label="Select Class" id="class">
-      <option selected disabled>Select Class</option>
-      <?php foreach ($class as $c): ?>
-        <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
-      <?php endforeach; ?>
-    </select>
-  </div>
+
 </div>
 
 <div class="table-responsive">
@@ -59,11 +60,13 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nama</th>
+        <th scope="col">Email</th>
         <th scope="col">Kelas</th>
         <th scope="col">Jurusan</th>
-        <th scope="col">Nomor Absen</th>
-        <th scope="col">Tanggal</th>
+        <th scope="col">No. Absen</th>
         <th scope="col">Timestamp</th>
+        <th scope="col">Status</th>
+        <th scope="col">Tanggal</th>
       </tr>
     </thead>
     <tbody id="data-table">
@@ -101,17 +104,36 @@
         },
         success: function(data) {
           console.log(data);
+
+          let student = data.student;
+          let presence = data.presence;
+
+          if (student.length > 0) {
+            presence = student.map((item, index) => {
+              const presenceCheck = presence.find(presence => presence.id_user == item.id_user);
+
+              return {
+                ...item,
+                ...presenceCheck,
+                status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
+              }
+            })
+          }
+
+
           let html = '';
-          data.forEach((item, index) => {
+          presence.forEach((item, index) => {
             html += `
             <tr>
               <th scope="row">${index + 1}</th>
               <td>${item.nama}</td>
+              <td>${item.email}</td>
               <td>${item.kelas}</td>
               <td>${item.kode_jurusan}</td>
               <td>${item.no_absen}</td>
-              <td>${item.tanggal}</td>
-              <td>${item.timestamp}</td>
+              <td>${item.timestamp ?? '-'}</td>
+              <td><span class="badge text-${item.status == 'Hadir' ? 'bg-success' : 'bg-danger'}">${item.status}</span></td>
+              <td>${item.tanggal ?? '-'}</td>
             </tr>
             `;
           });
@@ -119,27 +141,53 @@
         }
       })
     }
-    requestBackend();
 
-    $('#year').on('change', function() {
+    // ==========================================
+    // Filter Handler
+    // ==========================================
+
+    function yearChanged() {
       $('#day').html('<option selected disabled>Select Month First</option>');
       $('#month').html('<option selected disabled>Select Month</option>');
-      $('#month').append('<option value="<?= date('m') ?>">This Month</option>');
+      $('#month').append('<option value="<?= date('n') ?>">This Month</option>');
       for (let i = 1; i <= 12; i++) {
         $('#month').append(`<option value="${i}">${i}</option>`);
       }
+    }
 
-      requestBackend();
-    })
-
-    $('#month').on('change', function() {
+    function monthChanged() {
       $('#day').html('<option selected disabled>Select Day</option>');
-      $('#day').append('<option value="<?= date('d') ?>">This Day</option>');
+      $('#day').append('<option value="<?= date('j') ?>">This Day</option>');
       const totalDay = new Date($('#year').val(), $('#month').val(), 0).getDate();
       for (let i = 1; i <= totalDay; i++) {
         $('#day').append(`<option value="${i}">${i}</option>`);
       }
+    }
 
+    function defaultFilter() {
+      $('#year').val(<?= date('Y') ?>);
+      yearChanged();
+      $('#month').val(<?= date('m') ?>);
+      monthChanged();
+      $('#day').val(<?= date('d') ?>);
+      $('#class').val($('#class option:first').val());
+
+      requestBackend();
+    }
+
+    defaultFilter();
+
+    // ==========================================
+    // Event Handler
+    // ==========================================
+
+    $('#year').on('change', function() {
+      yearChanged();
+      requestBackend();
+    })
+
+    $('#month').on('change', function() {
+      monthChanged();
       requestBackend();
     })
 
@@ -151,16 +199,8 @@
       requestBackend();
     })
 
-    $()
+    $('#filter').on('click', defaultFilter)
 
-    $('#filter').on('click', function() {
-      $('#year').val($('#year option:first').val());
-      $('#month').val($('#month option:first').val());
-      $('#day').val($('#day option:first').val());
-      $('#class').val($('#class option:first').val());
-
-      requestBackend();
-    })
   });
 </script>
 <?= $this->endSection(); ?>
