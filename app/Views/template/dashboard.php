@@ -1,5 +1,9 @@
 <?= $this->extend('layout/template'); ?>
 
+<?= $this->section('styles'); ?>
+<?= $this->renderSection('styles'); ?>
+<?= $this->endSection(); ?>
+
 <?= $this->section('body'); ?>
 
 <?php

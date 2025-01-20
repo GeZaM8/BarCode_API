@@ -1,10 +1,27 @@
 <?= $this->extend('template/dashboard'); ?>
 
+<?= $this->section('styles'); ?>
+<style>
+  .table tr th,
+  .table tr td {
+    white-space: nowrap;
+  }
+</style>
+<?= $this->endSection(); ?>
+
 <?= $this->section('content'); ?>
 
-<h1>Presence</h1>
-<div class="row mb-3">
-  <div class="col-3">
+<div class="d-flex justify-content-between align-items-center mb-2 gap-5">
+  <div class="d-flex align-items-center gap-3">
+    <h1>Presence</h1>
+    <div class="spinner-border text-primary" role="status" id="loading">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <button class="btn btn-sm btn-primary" id="filter">Reset Filter</button>
+</div>
+<div class="row mb-2">
+  <div class="col-md-3 mb-3">
     <label for="year" class="form-label">Year</label>
     <select class="form-select" aria-label="Select Year" id="year">
       <option selected disabled>Select Year</option>
@@ -13,19 +30,19 @@
       <?php endfor; ?>
     </select>
   </div>
-  <div class="col-3">
+  <div class="col-md-3 mb-3">
     <label for="month" class="form-label">Month</label>
     <select class="form-select" aria-label="Select Month" id="month">
       <option selected disabled>Select Year First</option>
     </select>
   </div>
-  <div class="col-3">
+  <div class="col-md-3 mb-3">
     <label for="day" class="form-label">Day</label>
     <select class="form-select" aria-label="Select Day" id="day">
       <option selected disabled>Select Month First</option>
     </select>
   </div>
-  <div class="col-3">
+  <div class="col-md-3 mb-3">
     <label for="class" class="form-label">Class</label>
     <select class="form-select" aria-label="Select Class" id="class">
       <option selected disabled>Select Class</option>
@@ -35,6 +52,7 @@
     </select>
   </div>
 </div>
+
 <div class="table-responsive">
   <table class="table">
     <thead>
@@ -52,11 +70,7 @@
     </tbody>
   </table>
 </div>
-<div class="d-flex justify-content-center" id="loading">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
+
 
 <?= $this->endSection(); ?>
 
@@ -134,6 +148,17 @@
     })
 
     $('#class').on('change', function() {
+      requestBackend();
+    })
+
+    $()
+
+    $('#filter').on('click', function() {
+      $('#year').val($('#year option:first').val());
+      $('#month').val($('#month option:first').val());
+      $('#day').val($('#day option:first').val());
+      $('#class').val($('#class option:first').val());
+
       requestBackend();
     })
   });
