@@ -12,7 +12,7 @@ class USiswa extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id_user", "nama", "kelas", "kode_jurusan", "no_absen", "nis", "nisn"];
+    protected $allowedFields    = ["id_user", "nama", "kelas", "kode_jurusan", "no_absen", "nis", "nisn", "foto"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

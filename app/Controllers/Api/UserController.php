@@ -23,18 +23,25 @@ class UserController extends BaseController
         $img = $this->request->getFile("foto");
 
         $newName = $img->getRandomName();
-        $img->move(APPPATH . "public/upload", $newName);
 
-        return $this->respond(["foto" => $img->getName()]);
+        $allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+        $extension = $img->getExtension();
+        // return $this->respond(["a" => $extension])
+
+        if (!in_array($extension, $allowedExtensions)) {
+            return $this->fail("Gambar hanya boleh png, jpg, jpeg, dan webp");
+        }
+
         $dataUser = [
             "email" => $email
         ];
         $dataSiswa = [
             "nama" => $nama,
-            "kelas" => $kelas,
+            "id_kelas" => $kelas,
             "no_absen" => $no_absen,
             "nis" => $nis,
             "nisn" => $nisn,
+            "foto" => $newName
         ];
 
         $userModel = new User();
@@ -45,6 +52,7 @@ class UserController extends BaseController
         if ($updateSiswa) {
             $updateUser = $userModel->update(['id_user' => $id_user], $dataUser);
             if ($updateUser) {
+                $img->move(ROOTPATH . "public/assets/upload", $newName);
                 return $this->respond(["messages" => "Update Berhasil"]);
             } else {
                 return $this->fail("Email sudah Terdaftar");
