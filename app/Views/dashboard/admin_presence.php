@@ -109,7 +109,12 @@
           $('#refresh').attr('disabled', false);
           $('#loading').addClass("d-none");
         },
+        error: function(err) {
+          toastFailRequest(err)
+        },
         success: function(data) {
+          toastSuccessRequest();
+
           let student = data.student;
           let presence = data.presence;
 

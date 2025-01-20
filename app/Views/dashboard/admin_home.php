@@ -10,9 +10,10 @@
 
   .icon-bg {
     position: absolute;
-    top: 0;
+    top: 4px;
     right: -4px;
     font-size: 7rem;
+    opacity: 0.3;
     margin: 0;
   }
 
@@ -35,7 +36,7 @@
         Users
       </div>
       <div class="card-body">
-        <h1 class="card-title">50</h1>
+        <h1 class="card-title"><?= $users_count ?></h1>
         <i class="bi bi-people-fill icon-bg"></i>
       </div>
     </div>
@@ -43,10 +44,22 @@
   <div class="col-12 col-md-6 col-lg-4">
     <div class="card">
       <div class="card-header">
-        Keterlambatan (Bulan ini)
+        Kelas
       </div>
       <div class="card-body">
-
+        <h1 class="card-title"><?= $kelas_count ?></h1>
+        <i class="bi bi-building icon-bg"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        Jurusan
+      </div>
+      <div class="card-body">
+        <h1 class="card-title"><?= $jurusan_count ?></h1>
+        <i class="bi bi-stars icon-bg"></i>
       </div>
     </div>
   </div>

@@ -21,7 +21,7 @@
       ?>
       <form class="card" method="POST" action="/web/login">
         <div class="card-body">
-          <img src="/img/logo-full.png" class="mb-4 mx-auto d-block" style="width: 100%; max-width: 60%;" alt="BarCode Logo">
+          <img src="/assets/img/logo-full.png" class="mb-4 mx-auto d-block" style="width: 100%; max-width: 60%;" alt="BarCode Logo">
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">

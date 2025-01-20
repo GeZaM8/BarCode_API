@@ -11,6 +11,7 @@ class AdminController extends BaseController
     protected $kelasModel;
     protected $userModel;
     protected $userRole;
+    protected $jurusanModel;
 
     public function __construct()
     {
@@ -19,6 +20,7 @@ class AdminController extends BaseController
         $this->kelasModel   = new \App\Models\Kelas();
         $this->userModel    = new \App\Models\User();
         $this->userRole     = new \App\Models\UserRole();
+        $this->jurusanModel = new \App\Models\Jurusan();
     }
 
     public function index()
@@ -26,6 +28,9 @@ class AdminController extends BaseController
         return view('dashboard/admin_home', [
             'title' => 'Admin',
             'current_page' => 'home',
+            'users_count' => $this->userModel->countAllResults(),
+            'kelas_count' => $this->kelasModel->countAllResults(),
+            'jurusan_count' => $this->jurusanModel->countAllResults(),
         ]);
     }
 

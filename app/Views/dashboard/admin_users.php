@@ -69,12 +69,23 @@
         },
         beforeSend: function() {
           loading.removeClass("d-none");
+          filter.attr('disabled', true);
+          refresh.attr('disabled', true);
+        },
+        complete: function() {
+          loading.addClass("d-none");
+          filter.attr('disabled', false);
+          refresh.attr('disabled', false);
+        },
+        error: function(err) {
+          toastFailRequest(err)
         },
         success: function(data) {
+          toastSuccessRequest()
+
           let type = data.type;
           let users = data.users;
 
-          loading.addClass("d-none");
           table.html('');
           head.html('');
 
@@ -175,6 +186,7 @@
         }
       })
     }
+    requestBackend();
 
     function getKelas() {
       $.ajax({
@@ -197,9 +209,7 @@
     function defaultFilter() {
       role.val("")
       role.trigger('change');
-      requestBackend()
     }
-    defaultFilter()
 
     role.on('change', function() {
       if (role.val() == '1') {
