@@ -120,7 +120,7 @@
               return {
                 ...item,
                 ...presenceCheck,
-                tanggal: presenceCheck ? presenceCheck.tanggal : "<?= date('Y-m-d') ?>",
+                tanggal: presenceCheck ? presenceCheck.tanggal : $('#year').val() + '-' + (0 + $('#month').val()).slice(-2) + '-' + (0 + $('#day').val()).slice(-2),
                 status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
               }
             })

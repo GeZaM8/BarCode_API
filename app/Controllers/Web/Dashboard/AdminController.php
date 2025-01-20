@@ -10,13 +10,15 @@ class AdminController extends BaseController
     protected $absenModel;
     protected $kelasModel;
     protected $userModel;
+    protected $userRole;
 
     public function __construct()
     {
         helper('weburl');
-        $this->absenModel = new \App\Models\Absensi();
-        $this->kelasModel = new \App\Models\Kelas();
-        $this->userModel = new \App\Models\User();
+        $this->absenModel   = new \App\Models\Absensi();
+        $this->kelasModel   = new \App\Models\Kelas();
+        $this->userModel    = new \App\Models\User();
+        $this->userRole     = new \App\Models\UserRole();
     }
 
     public function index()
@@ -81,11 +83,41 @@ class AdminController extends BaseController
         return $this->respond($payload);
     }
 
+    public function getUsers()
+    {
+        $role  = $this->request->getVar('role');
+        $class = $this->request->getVar('kelas');
+
+        $builder = $this->userModel->getUsersWithDetails();
+
+        if ($role) {
+            $builder->where("u.id_role", $role)->orderBy("kelas", "ASC")->orderBy("no_absen", "ASC");
+
+            if ($role == 1)
+                if ($class)
+                    $builder->where("kelas", $class);
+        }
+
+        $payload = [
+            "type"  => $role,
+            "users" => $builder->get()->getResultObject(),
+        ];
+
+        return $this->respond($payload);
+    }
+
+    public function getKelas()
+    {
+        $kelas = $this->kelasModel->findAll();
+        return $this->respond($kelas);
+    }
+
     public function users()
     {
         return view('dashboard/admin_users', [
             'title' => 'Admin',
             'current_page' => 'users',
+            'roles' => $this->userRole->findAll(),
         ]);
     }
 

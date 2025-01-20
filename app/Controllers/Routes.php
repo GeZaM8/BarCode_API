@@ -51,6 +51,8 @@ $routes->group("web", static function (RouteCollection $routes) {
 
         $routes->group("api", static function (RouteCollection $routes) {
             $routes->get("get-presence", [AdminController::class, "getPresence"]);
+            $routes->get("get-users", [AdminController::class, "getUsers"]);
+            $routes->get("get-kelas", [AdminController::class, "getKelas"]);
         });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
