@@ -5,6 +5,7 @@ use App\Controllers\Api\Auth;
 use App\Controllers\Api\QRCodeController;
 use App\Controllers\Api\UserController;
 use App\Controllers\Web\AuthController;
+use App\Controllers\Web\Dashboard\AdminBackendController;
 use App\Controllers\Web\Dashboard\AdminController;
 use App\Controllers\Web\Dashboard\TeacherController;
 use CodeIgniter\Router\RouteCollection;
@@ -47,12 +48,15 @@ $routes->group("web", static function (RouteCollection $routes) {
         $routes->get("/", [AdminController::class, "index"]);
         $routes->get("presence", [AdminController::class, "presence"]);
         $routes->get("users", [AdminController::class, "users"]);
+        $routes->get("kelas", [AdminController::class, "kelas"]);
+        $routes->get("jurusan", [AdminController::class, "jurusan"]);
         $routes->get("logout", [AdminController::class, "logout"]);
 
         $routes->group("api", static function (RouteCollection $routes) {
-            $routes->get("get-presence", [AdminController::class, "getPresence"]);
-            $routes->get("get-users", [AdminController::class, "getUsers"]);
-            $routes->get("get-kelas", [AdminController::class, "getKelas"]);
+            $routes->get("get-presence", [AdminBackendController::class, "getPresence"]);
+            $routes->get("get-users", [AdminBackendController::class, "getUsers"]);
+            $routes->get("get-kelas", [AdminBackendController::class, "getKelas"]);
+            $routes->get("get-jurusan", [AdminBackendController::class, "getJurusan"]);
         });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
