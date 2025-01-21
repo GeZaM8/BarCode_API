@@ -12,7 +12,6 @@
   </div>
   <div class="d-flex gap-2 ">
     <button class="btn btn-sm btn-success" id="add">Tambah</button>
-    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
     <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
 </div>
@@ -31,14 +30,15 @@
 <?= $this->section('scripts'); ?>
 <script>
   $(document).ready(function() {
+    let baseUrl = "<?= admin_url() ?>";
+    let table = $('#data-table');
+    let head = $('#head-table');
+    let loading = $('#loading');
+    let refresh = $('#refresh');
+
     loadTable();
 
     function loadTable() {
-      let baseUrl = "<?= admin_url() ?>";
-      let table = $('#data-table');
-      let head = $('#head-table');
-      let loading = $('#loading');
-      let refresh = $('#refresh');
 
       $.ajax({
         url: '<?= admin_url('api/get-jurusan') ?>',
