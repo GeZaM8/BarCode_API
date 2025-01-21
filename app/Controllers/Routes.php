@@ -55,8 +55,11 @@ $routes->group("web", static function (RouteCollection $routes) {
         $routes->group("api", static function (RouteCollection $routes) {
             $routes->get("get-presence", [AdminBackendController::class, "getPresence"]);
             $routes->get("get-users", [AdminBackendController::class, "getUsers"]);
+            $routes->get("get-kelas/(:num)", [AdminBackendController::class, "getKelas/$1"]);
             $routes->get("get-kelas", [AdminBackendController::class, "getKelas"]);
             $routes->get("get-jurusan", [AdminBackendController::class, "getJurusan"]);
+
+            $routes->post("edit-kelas/(:num)", [AdminBackendController::class, "editKelas/$1"]);
         });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {

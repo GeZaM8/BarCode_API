@@ -85,9 +85,14 @@ class AdminBackendController extends BaseController
         return $this->respond($payload);
     }
 
-    public function getKelas()
+    public function getKelas($id = null)
     {
-        $kelas = $this->kelasModel->findAll();
+        if ($id) {
+            $kelas = $this->kelasModel->find($id);
+        } else {
+            $kelas = $this->kelasModel->findAll();
+        }
+
         return $this->respond($kelas);
     }
 
@@ -95,5 +100,14 @@ class AdminBackendController extends BaseController
     {
         $jurusan = $this->jurusanModel->findAll();
         return $this->respond($jurusan);
+    }
+
+    public function editKelas($id)
+    {
+        $data = $this->request->getVar();
+
+        $this->kelasModel->update($id, $data);
+
+        return $this->respond(['message' => 'Success Update Kelas']);
     }
 }

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class Kelas extends Model
 {
     protected $table            = 'kelas';
-    protected $primaryKey       = 'kelas';
+    protected $primaryKey       = 'id_kelas';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;

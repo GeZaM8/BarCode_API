@@ -11,7 +11,6 @@
   </div>
   <div class="d-flex gap-2 ">
     <button class="btn btn-sm btn-success" id="add">Tambah</button>
-    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
     <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
 </div>
@@ -25,55 +24,119 @@
   </table>
 </div>
 
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="edit-form" onsubmit="formHandle(event)">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Kelas</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="kelas" class="form-label">Nama Kelas</label>
+            <input type="text" class="form-control" id="kelas" name="kelas">
+            <input type="hidden" class="form-control" id="id_kelas" name="id_kelas">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary" id="save-btn">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
 <script>
-  $(document).ready(function() {
-    loadTable();
+  let baseUrl = "<?= admin_url() ?>";
+  let table = $('#data-table');
+  let head = $('#head-table');
+  let loading = $('#loading');
+  let refresh = $('#refresh');
+  let editForm = $('#edit-form');
+  let editModal = $('#edit-modal');
 
-    function loadTable() {
-      let baseUrl = "<?= admin_url() ?>";
-      let table = $('#data-table');
-      let head = $('#head-table');
-      let loading = $('#loading');
-      let refresh = $('#refresh');
+  function editKelas(id, kelas) {
+    $.ajax({
+      url: '<?= admin_url('api/get-kelas/') ?>' + id,
+      method: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        $('#edit-modal').modal('hide');
+        $('#edit-form').trigger('reset');
+        loading.removeClass("d-none");
+      },
+      success: function(res) {
+        loading.addClass("d-none");
+        editModal.modal('show');
+        editForm.find('#kelas').val(res.kelas);
+        editForm.find('#id_kelas').val(res.id_kelas);
+      }
+    })
+  }
 
-      $.ajax({
-        url: '<?= admin_url('api/get-kelas') ?>',
-        method: 'GET',
-        dataType: 'json',
-        beforeSend: function() {
-          loading.removeClass("d-none");
-          refresh.attr('disabled', true);
-        },
-        success: function(res) {
-          loading.addClass("d-none");
-          refresh.attr('disabled', false);
-          head.html(`
+  function formHandle(e) {
+    e.preventDefault();
+    $.ajax({
+      url: '<?= admin_url('api/edit-kelas/') ?>' + editForm.find('#id_kelas').val(),
+      method: 'POST',
+      dataType: 'json',
+      data: editForm.serialize(),
+      beforeSend: function() {
+        $('save-btn').attr('disabled', true);
+      },
+      complete: function() {
+        $('save-btn').attr('disabled', false);
+      },
+      success: function(res) {
+        editModal.modal('hide');
+        loadTable();
+        toastSuccessRequest(res.message);
+      }
+    })
+  }
+
+  loadTable();
+
+  function loadTable() {
+    $.ajax({
+      url: '<?= admin_url('api/get-kelas') ?>',
+      method: 'GET',
+      dataType: 'json',
+      beforeSend: function() {
+        loading.removeClass("d-none");
+        refresh.attr('disabled', true);
+      },
+      success: function(res) {
+        loading.addClass("d-none");
+        refresh.attr('disabled', false);
+        head.html(`
                 <tr>
                   <th>No</th>
                   <th>Nama Kelas</th>
                   <th>Aksi</th>
                 </tr>
               `);
-          table.html('');
-          res.forEach((item, index) => {
-            table.append(`
+        table.html('');
+        res.forEach((item, index) => {
+          table.append(`
                   <tr>
                     <td>${index + 1}</td>
                     <td>${item.kelas}</td>
                     <td>
-                      <a href="${baseUrl}admin/kelas/${item.id_kelas}" class="btn btn-sm btn-success"><i class="bi bi-pencil-fill"></i></a>
-                      <a href="${baseUrl}admin/kelas/${item.id_kelas}" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
+                      <button type="button" class="btn btn-sm btn-success" onclick="editKelas('${item.id_kelas}', '${item.kelas}')"><i class="bi bi-pencil-fill"></i></button>
+                      <button type="button" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
                     </td>
                   </tr>
                 `);
-          });
-        }
-      })
-    }
-  });
+        });
+      }
+    })
+  }
 </script>
 
 <?= $this->endSection(); ?>
