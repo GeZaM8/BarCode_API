@@ -11,8 +11,9 @@
     </div>
   </div>
   <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-primary" id="filter">Reset Filter</button>
-    <button class="btn btn-sm btn-success" id="refresh">Refresh</button>
+    <button class="btn btn-sm btn-success" id="add">Tambah</button>
+    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
+    <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
 </div>
 <div class="row mb-2">

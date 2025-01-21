@@ -13,45 +13,45 @@
 
 <div class="d-flex justify-content-between align-items-center mb-2 gap-5">
   <div class="d-flex align-items-center gap-3">
-    <h1>Presence</h1>
+    <h1>Kehadiran</h1>
     <div class="spinner-border text-primary" role="status" id="loading">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
   <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-primary" id="filter">Reset Filter</button>
-    <button class="btn btn-sm btn-success" id="refresh">Refresh</button>
+    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
+    <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
 </div>
 <div class="row mb-2">
   <div class="col-md-3 mb-3">
-    <label for="class" class="form-label">Class</label>
+    <label for="class" class="form-label">Kelas</label>
     <select class="form-select" aria-label="Select Class" id="class">
-      <option selected disabled>Select Class</option>
+      <option selected disabled>Pilih Kelas</option>
       <?php foreach ($class as $c): ?>
         <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
       <?php endforeach; ?>
     </select>
   </div>
   <div class="col-md-3 mb-3">
-    <label for="year" class="form-label">Year</label>
+    <label for="year" class="form-label">Tahun</label>
     <select class="form-select" aria-label="Select Year" id="year">
-      <option selected disabled>Select Year</option>
+      <option selected disabled>Pilih Tahun</option>
       <?php for ($i = $end_year; $i >= $start_year; $i--): ?>
         <option value="<?= $i ?>"><?= $i ?></option>
       <?php endfor; ?>
     </select>
   </div>
   <div class="col-md-3 mb-3">
-    <label for="month" class="form-label">Month</label>
+    <label for="month" class="form-label">Bulan</label>
     <select class="form-select" aria-label="Select Month" id="month">
-      <option selected disabled>Select Year First</option>
+      <option selected disabled>Pilih tahun terlebih dahulu</option>
     </select>
   </div>
   <div class="col-md-3 mb-3">
     <label for="day" class="form-label">Day</label>
     <select class="form-select" aria-label="Select Day" id="day">
-      <option selected disabled>Select Month First</option>
+      <option selected disabled>Pilih bulan terlebih dahulu</option>
     </select>
   </div>
 
@@ -158,17 +158,17 @@
     // ==========================================
 
     function yearChanged() {
-      $('#day').html('<option selected disabled>Select Month First</option>');
-      $('#month').html('<option selected disabled>Select Month</option>');
-      $('#month').append('<option value="<?= date('n') ?>">This Month</option>');
+      $('#day').html('<option selected disabled>Pilih bulan terlebih dahulu</option>');
+      $('#month').html('<option selected disabled>Pilih bulan</option>');
+      $('#month').append('<option value="<?= date('n') ?>">Bulan ini</option>');
       for (let i = 1; i <= 12; i++) {
         $('#month').append(`<option value="${i}">${i}</option>`);
       }
     }
 
     function monthChanged() {
-      $('#day').html('<option selected disabled>Select Day</option>');
-      $('#day').append('<option value="<?= date('j') ?>">This Day</option>');
+      $('#day').html('<option selected disabled>Pilih hari</option>');
+      $('#day').append('<option value="<?= date('j') ?>">Hari ini</option>');
       const totalDay = new Date($('#year').val(), $('#month').val(), 0).getDate();
       for (let i = 1; i <= totalDay; i++) {
         $('#day').append(`<option value="${i}">${i}</option>`);

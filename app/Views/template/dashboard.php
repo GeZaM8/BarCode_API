@@ -7,11 +7,6 @@
 
 <?= $this->section('body'); ?>
 
-<?php
-
-$baseUrl = "/web/admin";
-
-?>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
@@ -24,19 +19,26 @@ $baseUrl = "/web/admin";
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link <?= $current_page == 'home' ? 'active' : '' ?>" href="<?= $baseUrl ?>">Home</a>
+          <a class="nav-link <?= $current_page == 'home' ? 'active' : '' ?>" href="<?= admin_url() ?>">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/qrcode">QRCode</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <?= $current_page == 'users' ? 'active' : '' ?>" href="<?= $baseUrl ?>/users">Users</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?= str_contains($current_page, 'data') ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Data
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item <?= $current_page == 'data.users' ? 'active' : '' ?>" href="<?= admin_url('users') ?>">Users</a></li>
+            <li><a class="dropdown-item <?= $current_page == 'data.kelas' ? 'active' : '' ?>" href="<?= admin_url('kelas') ?>">Kelas</a></li>
+            <li><a class="dropdown-item <?= $current_page == 'data.jurusan' ? 'active' : '' ?>" href="<?= admin_url('jurusan') ?>">Jurusan</a></li>
+          </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link <?= $current_page == 'presence' ? 'active' : '' ?>" href="<?= $baseUrl ?>/presence">Presence</a>
+          <a class="nav-link <?= $current_page == 'presence' ? 'active' : '' ?>" href="<?= admin_url('presence') ?>">Kehadiran</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?= $baseUrl ?>/logout">Logout</a>
+          <a class="nav-link" href="<?= admin_url('logout') ?>">Keluar</a>
         </li>
       </ul>
     </div>
