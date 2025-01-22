@@ -32,6 +32,8 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
 
     $routes->post("/update/siswa", [UserController::class, "updateUser"]);
+
+    $routes->get("siswa/(:num)", [UserController::class, "getSiswa/$1"]);
 });
 
 //============================================//

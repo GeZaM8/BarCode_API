@@ -9,24 +9,35 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class UserController extends BaseController
 {
+    public function getSiswa($id)
+    {
+        $siswaModel = new USiswa();
+
+        $siswa = $siswaModel->getSiswaWithDetails()->where("u_siswa.id_user", $id)->first();
+
+        return $this->respond($siswa);
+    }
     public function updateUser()
     {
+        $data = $this->request->getVar("data");
+        $dataJson = json_decode($data);
+
         $id_user = $this->request->getVar("id_user");
         $email = $this->request->getVar("email");
 
-        $nama = $this->request->getVar("nama");
-        $kelas = $this->request->getVar("kelas");
-        $no_absen = $this->request->getVar("no_absen");
-        $nis = $this->request->getVar("nis");
-        $nisn = $this->request->getVar("nisn");
-
+        $id_user = $dataJson->id_user;
+        $email = $dataJson->email;
+        $nama = $dataJson->nama;
+        $kelas = $dataJson->kelas;
+        $no_absen = $dataJson->absen;  // Ensure the field name is correct
+        $nis = $dataJson->nis;
+        $nisn = $dataJson->nisn;
         $img = $this->request->getFile("foto");
 
         $newName = $img->getRandomName();
 
         $allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
         $extension = $img->getExtension();
-        // return $this->respond(["a" => $extension])
 
         if (!in_array($extension, $allowedExtensions)) {
             return $this->fail("Gambar hanya boleh png, jpg, jpeg, dan webp");

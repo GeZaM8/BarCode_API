@@ -43,4 +43,13 @@ class USiswa extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getSiswaWithDetails()
+    {
+        $builder = $this
+            ->join("kelas k", "u_siswa.id_kelas = k.id_kelas", "left")
+            ->join("jurusan j", "u_siswa.kode_jurusan = j.kode_jurusan", "left")
+            ->join("users u", "u_siswa.id_user = u.id_user");
+        return $builder;
+    }
 }
