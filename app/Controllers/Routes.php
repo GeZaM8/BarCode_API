@@ -59,13 +59,17 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->get("get-users", [AdminBackendController::class, "getUsers"]);
             $routes->get("get-kelas/(:num)", [AdminBackendController::class, "getKelas/$1"]);
             $routes->get("get-kelas", [AdminBackendController::class, "getKelas"]);
+            $routes->get("get-jurusan/(:segment)", [AdminBackendController::class, "getJurusan/$1"]);
             $routes->get("get-jurusan", [AdminBackendController::class, "getJurusan"]);
 
             $routes->post("edit-kelas/(:num)", [AdminBackendController::class, "editKelas/$1"]);
+            $routes->post("edit-jurusan/(:segment)", [AdminBackendController::class, "editJurusan/$1"]);
 
             $routes->post("add-kelas", [AdminBackendController::class, "addKelas"]);
+            $routes->post("add-jurusan", [AdminBackendController::class, "addJurusan"]);
 
             $routes->delete("delete-kelas/(:num)", [AdminBackendController::class, "deleteKelas/$1"]);
+            $routes->delete("delete-jurusan/(:segment)", [AdminBackendController::class, "deleteJurusan/$1"]);
         });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {

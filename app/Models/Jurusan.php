@@ -12,7 +12,7 @@ class Jurusan extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ["kode_jurusan", "nama_jurusan"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

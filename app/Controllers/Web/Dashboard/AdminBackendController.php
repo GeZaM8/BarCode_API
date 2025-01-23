@@ -124,6 +124,18 @@ class AdminBackendController extends BaseController
         return $this->respond(['message' => 'Success Update Kelas']);
     }
 
+    public function editJurusan($id)
+    {
+        $data = $this->request->getVar();
+        try {
+            $this->jurusanModel->update($id, $data);
+
+            return $this->respond(['message' => 'Success Update Jurusan']);
+        } catch (\Exception $e) {
+            return $this->respond(['message' => $e->getMessage()], 500);
+        }
+    }
+
     // ======================================================================
     // Add Data
     // ======================================================================
@@ -137,6 +149,15 @@ class AdminBackendController extends BaseController
         return $this->respond(['message' => 'Success Update Kelas']);
     }
 
+    public function addJurusan()
+    {
+        $data = $this->request->getVar();
+
+        $this->jurusanModel->insert($data);
+
+        return $this->respond(['message' => 'Success Add Jurusan']);
+    }
+
     // ======================================================================
     // Delete Data
     // ======================================================================
@@ -146,6 +167,16 @@ class AdminBackendController extends BaseController
         try {
             $this->kelasModel->delete($id);
             return $this->respond(['message' => 'Success Delete Kelas']);
+        } catch (\Exception $e) {
+            return $this->respond(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteJurusan($id)
+    {
+        try {
+            $this->jurusanModel->delete($id);
+            return $this->respond(['message' => 'Success Delete Jurusan']);
         } catch (\Exception $e) {
             return $this->respond(['message' => $e->getMessage()], 500);
         }
