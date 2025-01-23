@@ -111,11 +111,9 @@
           $('#loading').addClass("d-none");
         },
         error: function(err) {
-          console.log(err);
           toastFailRequest(err)
         },
         success: function(data) {
-          console.log(data);
           toastSuccessRequest();
 
           let student = data.student;
