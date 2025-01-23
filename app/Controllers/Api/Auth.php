@@ -60,7 +60,7 @@ class Auth extends BaseController
                 return $this->respond(['messages' => "Register Berhasil"]);
             } else {
                 $db->transRollback();
-                return $this->fail(['messages' => $siswaModel->errors()]);
+                return $this->fail("NIS, NISN, atau Nomor Absen sudah Terdaftar");
             }
         } else {
             $db->transRollback();
