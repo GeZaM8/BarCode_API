@@ -68,6 +68,7 @@
         <th scope="col">Jurusan</th>
         <th scope="col">No. Absen</th>
         <th scope="col">Timestamp</th>
+        <th scope="col">Mood</th>
         <th scope="col">Status</th>
         <th scope="col">Tanggal</th>
       </tr>
@@ -110,9 +111,11 @@
           $('#loading').addClass("d-none");
         },
         error: function(err) {
+          console.log(err);
           toastFailRequest(err)
         },
         success: function(data) {
+          console.log(data);
           toastSuccessRequest();
 
           let student = data.student;
@@ -143,6 +146,7 @@
               <td>${item.kode_jurusan}</td>
               <td>${item.no_absen}</td>
               <td>${item.timestamp ?? '-'}</td>
+              <td>${item.mood ?? '-'}</td>
               <td><span class="badge text-${item.status == 'Hadir' ? 'bg-success' : 'bg-danger'}">${item.status}</span></td>
               <td>${item.tanggal ?? '-'}</td>
             </tr>

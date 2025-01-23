@@ -43,7 +43,7 @@ class AdminBackendController extends BaseController
             $userFilter = $userFilter->orderBy('kelas', "ASC")->orderBy("no_absen", "ASC")->get()->getResultObject();
         }
 
-        $result = $this->absenModel->withDetailUsers()->select("*, month(tanggal) as bulan, year(tanggal) as tahun");
+        $result = $this->absenModel->withDetailUsers();
 
 
         if ($year) {
