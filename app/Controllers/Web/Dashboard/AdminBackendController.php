@@ -79,7 +79,7 @@ class AdminBackendController extends BaseController
 
             if ($role == 1)
                 if ($class)
-                    $builder->where("kelas", $class);
+                    $builder->where("k.id_kelas", $class);
         }
 
         $payload = [

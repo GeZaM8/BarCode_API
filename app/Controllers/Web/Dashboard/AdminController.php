@@ -54,6 +54,8 @@ class AdminController extends BaseController
             'title' => 'Admin',
             'current_page' => 'data.users',
             'roles' => $this->userRole->findAll(),
+            'kelas' => $this->kelasModel->orderBy("kelas", "ASC")->findAll(),
+            'jurusan' => $this->jurusanModel->orderBy("nama_jurusan", "ASC")->findAll(),
         ]);
     }
 

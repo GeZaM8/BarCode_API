@@ -11,15 +11,15 @@
     </div>
   </div>
   <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-success" id="add">Tambah</button>
+    <button class="btn btn-sm btn-success" id="add" onclick="openData()">Tambah</button>
     <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
     <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
 </div>
 <div class="row mb-2">
   <div class="col-md-3 mb-3">
-    <label for="role" class="form-label">Role</label>
-    <select class="form-select" aria-label="Select Role" id="role">
+    <label for="role_filter" class="form-label">Role</label>
+    <select class="form-select" aria-label="Select Role" id="role_filter">
       <option selected disabled>Select Role</option>
       <option value="">All</option>
       <?php foreach ($roles as $r): ?>
@@ -28,9 +28,12 @@
     </select>
   </div>
   <div class="col-md-3 mb-3">
-    <label for="class" class="form-label">Class</label>
+    <label for="class" class="form-label">Kelas</label>
     <select class="form-select" aria-label="Select Class" id="class" disabled>
-      <option selected disabled value="">Select Role Siswa</option>
+      <option selected disabled value="">Pilih Role Siswa</option>
+      <?php foreach ($kelas as $c): ?>
+        <option value="<?= $c->id_kelas ?>"><?= $c->kelas ?></option>
+      <?php endforeach; ?>
     </select>
   </div>
 </div>
@@ -44,55 +47,105 @@
   </table>
 </div>
 
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="save-users" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="edit-form" onsubmit="formHandle(event)" action method="post">
+        <div class=" modal-header">
+          <h1 class="modal-title fs-5" id="modal-title">Tambah Users</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nama" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="nama" name="nama">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email">
+          </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" aria-label="Select Role" id="role">
+              <option selected disabled>Select Role</option>
+              <?php foreach ($roles as $r): ?>
+                <option value="<?= $r->id_role ?>"><?= $r->name_role ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div id="expand-data">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
 
 <script>
-  $(document).ready(function() {
-    let baseUrl = "<?= admin_url() ?>";
-    let table = $('#data-table');
-    let head = $('#head-table');
-    let loading = $('#loading');
-    let filter = $('#filter');
-    let refresh = $('#refresh');
-    let role = $('#role');
-    let kelas = $('#class');
+  let baseUrl = "<?= admin_url() ?>";
+  let table = $('#data-table');
+  let head = $('#head-table');
+  let loading = $('#loading');
+  let add = $('#add');
+  let filter = $('#filter');
+  let refresh = $('#refresh');
+  let role = $('#role_filter');
+  let kelas = $('#class');
+  let editModal = $('#edit-modal');
+  let editForm = $('#edit-form');
+  let roleUser = $('#role');
+  let expandForm = $('#expand-data');
 
-    function requestBackend() {
-      $.ajax({
-        url: '<?= admin_url('api/get-users') ?>',
-        method: 'GET',
-        dataType: 'json',
-        data: {
-          role: role.val(),
-          kelas: kelas.val(),
-        },
-        beforeSend: function() {
-          loading.removeClass("d-none");
-          filter.attr('disabled', true);
-          refresh.attr('disabled', true);
-        },
-        complete: function() {
-          loading.addClass("d-none");
-          filter.attr('disabled', false);
-          refresh.attr('disabled', false);
-        },
-        error: function(err) {
-          toastFailRequest(err)
-        },
-        success: function(data) {
-          toastSuccessRequest()
+  function openData() {
+    editModal.modal('show');
+    editModal.find('#modal-title').text('Tambah Users');
+    editForm.attr('action', '<?= admin_url('api/add-users') ?>');
+    editForm.trigger('reset');
+  }
 
-          let type = data.type;
-          let users = data.users;
+  function requestBackend() {
+    $.ajax({
+      url: '<?= admin_url('api/get-users') ?>',
+      method: 'GET',
+      dataType: 'json',
+      data: {
+        role: role.val(),
+        kelas: kelas.val(),
+      },
+      beforeSend: function() {
+        loading.removeClass("d-none");
+        filter.attr('disabled', true);
+        refresh.attr('disabled', true);
+      },
+      complete: function() {
+        loading.addClass("d-none");
+        filter.attr('disabled', false);
+        refresh.attr('disabled', false);
+      },
+      error: function(err) {
+        toastFailRequest(err)
+      },
+      success: function(data) {
+        toastSuccessRequest()
 
-          table.html('');
-          head.html('');
+        let type = data.type;
+        let users = data.users;
 
-          switch (type) {
-            case '1':
-              head.append(`
+        table.html('');
+        head.html('');
+
+        switch (type) {
+          case '1':
+            head.append(`
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
@@ -105,24 +158,24 @@
                     <th scope="col">NISN</th>
                   </tr>
                 `);
-              users.forEach((item, index) => {
-                table.append(`
+            users.forEach((item, index) => {
+              table.append(`
                   <tr>
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
                     <td>${item.nama ?? "-"}</td>
                     <td>${item.email}</td>
-                    <td>${item.kelas}</td>
-                    <td>${item.kode_jurusan}</td>
+                    <td>${item.kelas ?? "-"}</td>
+                    <td>${item.kode_jurusan ?? "-"}</td>
                     <td>${item.no_absen ?? "-"}</td>
                     <td>${item.nis ?? "-"}</td>
                     <td>${item.nisn ?? "-"}</td>
                   </tr>
                 `);
-              })
-              break
-            case '2':
-              head.append(`
+            })
+            break
+          case '2':
+            head.append(`
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
@@ -131,8 +184,8 @@
                     <th scope="col">NIP</th>
                   </tr>
                 `);
-              users.forEach((item, index) => {
-                table.append(`
+            users.forEach((item, index) => {
+              table.append(`
                   <tr>
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
@@ -141,28 +194,28 @@
                     <td>${item.nip ?? "-"}</td>
                   </tr>
                 `);
-              })
-              break
-            case '3':
-              head.append(`
+            })
+            break
+          case '3':
+            head.append(`
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
                     <th scope="col">Email</th>
                   </tr>
                 `);
-              users.forEach((item, index) => {
-                table.append(`
+            users.forEach((item, index) => {
+              table.append(`
                   <tr>
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
                     <td>${item.email}</td>
                   </tr>
                 `);
-              })
-              break
-            default:
-              head.append(`
+            })
+            break
+          default:
+            head.append(`
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
@@ -171,8 +224,8 @@
                     <th scope="col">Role</th>
                   </tr>
                 `);
-              users.forEach((item, index) => {
-                table.append(`
+            users.forEach((item, index) => {
+              table.append(`
                   <tr>
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
@@ -181,56 +234,94 @@
                     <td>${item.name_role}</td>
                   </tr>
                 `);
-              })
-              break
-          }
+            })
+            break
         }
-      })
-    }
-    requestBackend();
-
-    function getKelas() {
-      $.ajax({
-        url: '<?= admin_url('api/get-kelas') ?>',
-        method: 'GET',
-        dataType: 'json',
-        beforeSend: function() {
-          kelas.prop('disabled', true);
-        },
-        success: function(data) {
-          kelas.prop('disabled', false);
-          kelas.html('<option selected disabled>Select Class</option>');
-          data.forEach((item, index) => {
-            kelas.append(`<option value="${item.kelas}">${item.kelas}</option>`);
-          })
-        }
-      })
-    }
-
-    function defaultFilter() {
-      role.val("")
-      role.trigger('change');
-    }
-
-    role.on('change', function() {
-      if (role.val() == '1') {
-        getKelas()
-      } else {
-        kelas.prop('disabled', true);
-        kelas.html('<option selected disabled>Select Role Siswa</option>');
-        kelas.val($("#class option:first").val());
       }
-
-      requestBackend()
     })
+  }
+  requestBackend();
 
-    kelas.on('change', function() {
-      requestBackend()
-    })
+  function defaultFilter() {
+    role.val("")
+    role.trigger('change');
+  }
 
-    $('#filter').on('click', defaultFilter)
-    $('#refresh').on('click', requestBackend)
+  roleUser.on("change", (e) => {
+    const role_id = e.target.value;
+
+    expandForm.html('');
+
+    switch (role_id) {
+      case "1":
+        expandForm.html(`
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="class" class="form-label">Kelas</label>
+              <select class="form-select" aria-label="Select Class" id="class">
+                <option selected disabled>Select Class</option>
+                <?php foreach ($kelas as $k): ?>
+                  <option value="<?= $k->id_kelas ?>"><?= $k->kelas ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="jurusan" class="form-label">Jurusan</label>
+              <select class="form-select" aria-label="Select Jurusan" id="jurusan">
+                <option selected disabled>Select Jurusan</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="no_absen" class="form-label">No. Absen</label>
+              <input type="number" class="form-control" id="no_absen">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nis" class="form-label">NIS</label>
+              <input type="number" class="form-control" id="nis">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nisn" class="form-label">NISN</label>
+              <input type="number" class="form-control" id="nisn">
+            </div>
+          </div>
+        `);
+        break
+      case "2":
+        expandForm.html(`
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nip" class="form-label">NIP</label>
+              <input type="number" class="form-control" id="nip">
+            </div>
+          </div>
+        `);
+        break
+      default:
+        expandForm.html('');
+        break
+    }
+  });
+
+  role.on('change', function() {
+    kelas.val("");
+    console.log(role.val());
+    if (role.val() == '1') {
+      kelas.prop('disabled', false);
+      kelas.find('option:first').html('Pilih kelas');
+    } else {
+      kelas.prop('disabled', true);
+      kelas.find('option:first').html('Pilih role siswa');
+    }
+
+    requestBackend()
   })
+
+  kelas.on('change', function() {
+    requestBackend()
+  })
+
+  $('#filter').on('click', defaultFilter)
+  $('#refresh').on('click', requestBackend)
 </script>
 
 <?= $this->endSection(); ?>
