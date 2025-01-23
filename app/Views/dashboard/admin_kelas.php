@@ -24,7 +24,7 @@
   </table>
 </div>
 
-<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="edit-kelas" aria-hidden="true">
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="save-kelas" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="edit-form" onsubmit="formHandle(event)" action method="post">
