@@ -46,7 +46,7 @@ class Auth extends BaseController
             $dataSiswa = [
                 "id_user" => $insertUser,
                 "nama" => $this->request->getVar("nama"),
-                "kelas" => $this->request->getVar("kelas"),
+                "id_kelas" => $this->request->getVar("kelas"),
                 "kode_jurusan" => $this->request->getVar("kode_jurusan"),
                 "no_absen" > $this->request->getVar("no_absen"),
                 "nis" => $this->request->getVar("nis"),
