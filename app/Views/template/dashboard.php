@@ -22,7 +22,7 @@
           <a class="nav-link <?= $current_page == 'home' ? 'active' : '' ?>" href="<?= admin_url() ?>">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/qrcode">QRCode</a>
+          <a class="nav-link" href="<?= base_url("qrcode") ?>">QRCode</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle <?= str_contains($current_page, 'data') ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
