@@ -1,7 +1,7 @@
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('styles'); ?>
-<link rel="stylesheet" href="/assets/jquery/jquery.toast.min.css">
+<link rel="stylesheet" href="<?= base_url("assets/jquery/jquery.toast.min.css") ?>">
 <?= $this->renderSection('styles'); ?>
 <?= $this->endSection(); ?>
 
@@ -11,7 +11,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
     <a class="navbar-brand" href="<?= admin_url() ?>">
-      <img src="/assets/img/logo-long.png" alt="BarCode Logo" height="40">
+      <img src="<?= base_url("assets/img/logo-long.png") ?>" alt="BarCode Logo" height="40">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -52,8 +52,8 @@
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
-<script src="/assets/jquery/jquery-3.7.1.min.js"></script>
-<script src="/assets/jquery/jquery.toast.min.js"></script>
-<script src="/scripts/toast-helper.js"></script>
+<script src="<?= base_url("assets/jquery/jquery-3.7.1.min.js") ?>"></script>
+<script src="<?= base_url("/assets/jquery/jquery.toast.min.js") ?>"></script>
+<script src="<?= base_url("/scripts/toast-helper.js") ?>"></script>
 <?= $this->renderSection('scripts'); ?>
 <?= $this->endSection(); ?>
