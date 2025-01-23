@@ -11,6 +11,7 @@ class AbsensiController extends BaseController
     public function setAbsensi()
     {
         $jwt = $this->request->getVar("qrcode");
+        $id_user = $this->request->getVar("id_user");
 
         $qrcode = new QRCode();
 
@@ -21,7 +22,7 @@ class AbsensiController extends BaseController
         $absensi = new Absensi();
         $time = time();
 
-        $absensiBefore = $absensi->where('tanggal', date("Y-m-d", $time))->first();
+        $absensiBefore = $absensi->where("id_user", $id_user)->where('tanggal', date("Y-m-d", $time))->first();
         if ($absensiBefore) {
             return $this->fail("Anda sudah absen hari ini");
         }

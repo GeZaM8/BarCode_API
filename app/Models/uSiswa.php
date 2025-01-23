@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class USiswa extends Model
 {
     protected $table            = 'u_siswa';
-    protected $primaryKey       = 'id_user';
+    protected $primaryKey       = 'id_siswa';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id_user", "nama", "kelas", "kode_jurusan", "no_absen", "nis", "nisn", "foto"];
+    protected $allowedFields    = ["id_user", "nama", "id_kelas", "kode_jurusan", "no_absen", "nis", "nisn", "foto"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

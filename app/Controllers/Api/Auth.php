@@ -48,7 +48,7 @@ class Auth extends BaseController
                 "nama" => $this->request->getVar("nama"),
                 "id_kelas" => $this->request->getVar("kelas"),
                 "kode_jurusan" => $this->request->getVar("kode_jurusan"),
-                "no_absen" > $this->request->getVar("no_absen"),
+                "no_absen" => $this->request->getVar("no_absen"),
                 "nis" => $this->request->getVar("nis"),
                 "nisn" => $this->request->getVar("nisn")
             ];
@@ -60,7 +60,7 @@ class Auth extends BaseController
                 return $this->respond(['messages' => "Register Berhasil"]);
             } else {
                 $db->transRollback();
-                return $this->fail("NIS, NISN, atau Nomor Absen sudah Terdaftar");
+                return $this->fail(['messages' => $siswaModel->errors()]);
             }
         } else {
             $db->transRollback();
