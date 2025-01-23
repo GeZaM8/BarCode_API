@@ -22,6 +22,11 @@ class AdminBackendController extends BaseController
         $this->jurusanModel = new \App\Models\Jurusan();
     }
 
+
+    // ======================================================================
+    // Get Data
+    // ======================================================================
+
     public function getPresence()
     {
         $year = $this->request->getVar('year');
@@ -90,17 +95,25 @@ class AdminBackendController extends BaseController
         if ($id) {
             $kelas = $this->kelasModel->find($id);
         } else {
-            $kelas = $this->kelasModel->findAll();
+            $kelas = $this->kelasModel->orderBy('kelas', 'ASC')->findAll();
         }
 
         return $this->respond($kelas);
     }
 
-    public function getJurusan()
+    public function getJurusan($id = null)
     {
-        $jurusan = $this->jurusanModel->findAll();
+        if ($id) {
+            $jurusan = $this->jurusanModel->find($id);
+        } else {
+            $jurusan = $this->jurusanModel->orderBy('nama_jurusan', 'ASC')->findAll();
+        }
         return $this->respond($jurusan);
     }
+
+    // ======================================================================
+    // Edit Data
+    // ======================================================================
 
     public function editKelas($id)
     {
@@ -109,5 +122,32 @@ class AdminBackendController extends BaseController
         $this->kelasModel->update($id, $data);
 
         return $this->respond(['message' => 'Success Update Kelas']);
+    }
+
+    // ======================================================================
+    // Add Data
+    // ======================================================================
+
+    public function addKelas()
+    {
+        $data = $this->request->getVar();
+
+        $this->kelasModel->insert($data);
+
+        return $this->respond(['message' => 'Success Update Kelas']);
+    }
+
+    // ======================================================================
+    // Delete Data
+    // ======================================================================
+
+    public function deleteKelas($id)
+    {
+        try {
+            $this->kelasModel->delete($id);
+            return $this->respond(['message' => 'Success Delete Kelas']);
+        } catch (\Exception $e) {
+            return $this->respond(['message' => $e->getMessage()], 500);
+        }
     }
 }

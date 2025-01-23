@@ -62,6 +62,10 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->get("get-jurusan", [AdminBackendController::class, "getJurusan"]);
 
             $routes->post("edit-kelas/(:num)", [AdminBackendController::class, "editKelas/$1"]);
+
+            $routes->post("add-kelas", [AdminBackendController::class, "addKelas"]);
+
+            $routes->delete("delete-kelas/(:num)", [AdminBackendController::class, "deleteKelas/$1"]);
         });
     });
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
