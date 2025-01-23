@@ -63,7 +63,7 @@ class UserController extends BaseController
         if ($updateSiswa) {
             $updateUser = $userModel->update(['id_user' => $id_user], $dataUser);
             if ($updateUser) {
-                $img->move(ROOTPATH . "public/assets/upload", $newName);
+                $img->move(base_url("assets/upload"), $newName);
                 return $this->respond(["messages" => "Update Berhasil"]);
             } else {
                 return $this->fail("Email sudah Terdaftar");
