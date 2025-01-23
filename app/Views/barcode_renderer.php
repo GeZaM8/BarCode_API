@@ -18,7 +18,7 @@
         }
 
         img {
-            width: 50%;
+            width: 70%;
             height: 100vh;
             padding: 10px;
         }
