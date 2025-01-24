@@ -148,9 +148,9 @@ class AdminBackendController extends BaseController
     public function addUser()
     {
         $data = (array) $this->request->getVar();
+        $id_user = null;
 
         try {
-
             switch ($data['id_role']) {
                 case 1:
                     $id_user = $this->userModel->insert([
@@ -186,10 +186,9 @@ class AdminBackendController extends BaseController
                     ]);
                     break;
             }
-            if ($data['id_role'] == 1) {
-            }
             return $this->respond(['message' => 'Success Add User']);
-        } catch (\Exception $e) {
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            $this->userModel->delete($id_user);
             return $this->respond(['message' => $e->getMessage()], 500);
         }
     }

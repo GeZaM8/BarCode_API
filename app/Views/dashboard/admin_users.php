@@ -194,7 +194,7 @@
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
                     <td>${item.nama ?? "-"}</td>
-                    <td>${item.email}</td>
+                    <td>${item.email ?? "-"}</td>
                     <td>${item.kelas ?? "-"}</td>
                     <td>${item.kode_jurusan ?? "-"}</td>
                     <td>${item.no_absen ?? "-"}</td>
@@ -300,7 +300,7 @@
               <select class="form-select" aria-label="Select Jurusan" id="jurusan" name="kode_jurusan">
                 <option selected disabled>Select Jurusan</option>
                 <?php foreach ($jurusan as $j): ?>
-                  <option value="<?= $j->kode_jurusan ?>"><?= $j->nama_jurusan ?></option>
+                  <option value="<?= $j->kode_jurusan ?>">[<?= $j->kode_jurusan ?>] <?= $j->nama_jurusan ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
