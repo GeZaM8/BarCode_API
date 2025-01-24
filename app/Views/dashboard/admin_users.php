@@ -57,21 +57,16 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
+            Role:
+            <?php foreach ($roles as $r): ?>
+              <input type="radio" value="<?= $r->id_role ?>" class="btn-check" name="id_role" id="id-role-<?= $r->id_role ?>" autocomplete="off">
+              <label class="btn btn-sm btn-outline-primary" for="id-role-<?= $r->id_role ?>"><?= $r->name_role ?></label>
+            <?php endforeach; ?>
+          </div>
+
+          <div class="mb-3">
             <label for="nama" class="form-label">Nama</label>
             <input type="text" class="form-control" id="nama" name="nama">
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email">
-          </div>
-          <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select class="form-select" aria-label="Select Role" id="role">
-              <option selected disabled>Select Role</option>
-              <?php foreach ($roles as $r): ?>
-                <option value="<?= $r->id_role ?>"><?= $r->name_role ?></option>
-              <?php endforeach; ?>
-            </select>
           </div>
           <div id="expand-data">
 
@@ -102,15 +97,50 @@
   let kelas = $('#class');
   let editModal = $('#edit-modal');
   let editForm = $('#edit-form');
-  let roleUser = $('#role');
+  let roleUser = $('input[name="id_role"]');
   let expandForm = $('#expand-data');
 
-  function openData() {
+  function openData(id = null) {
     editModal.modal('show');
     editModal.find('#modal-title').text('Tambah Users');
-    editForm.attr('action', '<?= admin_url('api/add-users') ?>');
     editForm.trigger('reset');
+    expandForm.html('');
+
+    if (id == null) {
+      editForm.attr('action', '<?= admin_url('api/add-users') ?>');
+      return;
+    }
+
+
   }
+
+  function formHandle(e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: editForm.attr('action'),
+      method: 'POST',
+      dataType: 'json',
+      data: editForm.serialize(),
+      beforeSend: function() {
+        $('.btn').attr('disabled', true);
+        loading.removeClass("d-none");
+      },
+      complete: function() {
+        loading.addClass("d-none");
+        $('.btn').attr('disabled', false);
+      },
+      error: function(err) {
+        toastFailRequest(err);
+      },
+      success: function(data) {
+        toastSuccessRequest(data.message);
+        editModal.modal('hide');
+        requestBackend();
+      }
+    })
+  }
+
 
   function requestBackend() {
     $.ajax({
@@ -258,7 +288,7 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="class" class="form-label">Kelas</label>
-              <select class="form-select" aria-label="Select Class" id="class">
+              <select class="form-select" aria-label="Select Class" id="class" name="id_kelas">
                 <option selected disabled>Select Class</option>
                 <?php foreach ($kelas as $k): ?>
                   <option value="<?= $k->id_kelas ?>"><?= $k->kelas ?></option>
@@ -267,21 +297,24 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="jurusan" class="form-label">Jurusan</label>
-              <select class="form-select" aria-label="Select Jurusan" id="jurusan">
+              <select class="form-select" aria-label="Select Jurusan" id="jurusan" name="kode_jurusan">
                 <option selected disabled>Select Jurusan</option>
+                <?php foreach ($jurusan as $j): ?>
+                  <option value="<?= $j->kode_jurusan ?>"><?= $j->nama_jurusan ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
             <div class="col-md-6 mb-3">
               <label for="no_absen" class="form-label">No. Absen</label>
-              <input type="number" class="form-control" id="no_absen">
+              <input type="number" class="form-control" id="no_absen" name="no_absen">
             </div>
             <div class="col-md-6 mb-3">
               <label for="nis" class="form-label">NIS</label>
-              <input type="number" class="form-control" id="nis">
+              <input type="number" class="form-control" id="nis" name="nis">
             </div>
             <div class="col-md-6 mb-3">
               <label for="nisn" class="form-label">NISN</label>
-              <input type="number" class="form-control" id="nisn">
+              <input type="number" class="form-control" id="nisn" name="nisn">
             </div>
           </div>
         `);
@@ -289,15 +322,34 @@
       case "2":
         expandForm.html(`
           <div class="row">
+            <div class="col-12 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="col-12 mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password">
+            </div>
             <div class="col-md-6 mb-3">
               <label for="nip" class="form-label">NIP</label>
-              <input type="number" class="form-control" id="nip">
+              <input type="number" class="form-control" id="nip" name="nip">
             </div>
           </div>
         `);
         break
       default:
-        expandForm.html('');
+        expandForm.html(`
+          <div class="row">
+            <div class="col-12 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="col-12 mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password">
+            </div>
+          </div>
+        `);
         break
     }
   });

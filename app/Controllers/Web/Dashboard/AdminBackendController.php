@@ -10,6 +10,8 @@ class AdminBackendController extends BaseController
     protected $absenModel;
     protected $kelasModel;
     protected $userModel;
+    protected $userSiswaModel;
+    protected $userGuruModel;
     protected $userRole;
     protected $jurusanModel;
 
@@ -20,6 +22,9 @@ class AdminBackendController extends BaseController
         $this->userModel    = new \App\Models\User();
         $this->userRole     = new \App\Models\UserRole();
         $this->jurusanModel = new \App\Models\Jurusan();
+
+        $this->userSiswaModel = new \App\Models\USiswa();
+        $this->userGuruModel  = new \App\Models\UGuru();
     }
 
 
@@ -139,6 +144,55 @@ class AdminBackendController extends BaseController
     // ======================================================================
     // Add Data
     // ======================================================================
+
+    public function addUser()
+    {
+        $data = (array) $this->request->getVar();
+
+        try {
+
+            switch ($data['id_role']) {
+                case 1:
+                    $id_user = $this->userModel->insert([
+                        "id_role" => $data['id_role'],
+                    ]);
+                    $this->userSiswaModel->insert([
+                        "id_user" => $id_user,
+                        "nama" => $data['nama'],
+                        "id_kelas" => $data['id_kelas'],
+                        "kode_jurusan" => $data['kode_jurusan'],
+                        "no_absen" => $data['no_absen'],
+                        "nis" => $data['nis'],
+                        "nisn" => $data['nisn']
+                    ]);
+                    break;
+                case 2:
+                    $id_user = $this->userModel->insert([
+                        "email" => $data['email'],
+                        "password" => $data['password'],
+                        "id_role" => $data['id_role'],
+                    ]);
+                    $this->userGuruModel->insert([
+                        "id_user" => $id_user,
+                        "nama" => $data['nama'],
+                        "nip" => $data['nip']
+                    ]);
+                    break;
+                case 3:
+                    $id_user = $this->userModel->insert([
+                        "email" => $data['email'],
+                        "password" => $data['password'],
+                        "id_role" => $data['id_role'],
+                    ]);
+                    break;
+            }
+            if ($data['id_role'] == 1) {
+            }
+            return $this->respond(['message' => 'Success Add User']);
+        } catch (\Exception $e) {
+            return $this->respond(['message' => $e->getMessage()], 500);
+        }
+    }
 
     public function addKelas()
     {

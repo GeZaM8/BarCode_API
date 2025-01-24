@@ -65,6 +65,7 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->post("edit-kelas/(:num)", [AdminBackendController::class, "editKelas/$1"]);
             $routes->post("edit-jurusan/(:segment)", [AdminBackendController::class, "editJurusan/$1"]);
 
+            $routes->post("add-users", [AdminBackendController::class, "addUser"]);
             $routes->post("add-kelas", [AdminBackendController::class, "addKelas"]);
             $routes->post("add-jurusan", [AdminBackendController::class, "addJurusan"]);
 
