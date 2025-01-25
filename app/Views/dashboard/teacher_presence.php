@@ -91,7 +91,7 @@
       let kelas = $('#class').val();
 
       $.ajax({
-        url: '<?= admin_url('api/get-presence') ?>',
+        url: '<?= teacher_url('api/get-presence') ?>',
         method: 'GET',
         dataType: 'json',
         data: {
