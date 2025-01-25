@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\User;
 use App\Models\USiswa;
+use Exception;
 
 class SiswaController extends BaseController
 {
@@ -26,7 +27,7 @@ class SiswaController extends BaseController
         $email = $dataJson->email;
         $nama = $dataJson->nama;
         $kelas = $dataJson->kelas;
-        $no_absen = $dataJson->absen;  // Ensure the field name is correct
+        $no_absen = $dataJson->absen;
         $nis = $dataJson->nis;
         $nisn = $dataJson->nisn;
         $img = $this->request->getFile("foto");
@@ -58,8 +59,12 @@ class SiswaController extends BaseController
 
         if ($updateSiswa) {
             $img->move("assets/upload", $photo);
-            // if (!$photoOld)
-            unlink("assets/upload/" . $photoOld);
+
+            try {
+                if (!empty($photoOld))
+                    unlink("assets/upload/" . $photoOld);
+            } catch (Exception $e) {
+            }
 
             $updateUser = $this->userModel->update(['id_user' => $id_user], $dataUser);
             if ($updateUser) {
@@ -77,7 +82,7 @@ class SiswaController extends BaseController
         $this->siswaModel = new USiswa();
 
         $siswa = $this->siswaModel->getSiswaWithDetails()->where("u_siswa.id_user", $id)->first();
-        $siswa->foto = base_url() . "assets/upload/" . $siswa->foto;
+        $siswa->foto = base_url("assets/upload/" . $siswa->foto);
 
         return $this->respond($siswa);
     }
