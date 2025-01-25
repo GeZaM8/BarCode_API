@@ -9,13 +9,18 @@ use Firebase\JWT\JWT;
 
 class QRCodeController extends BaseController
 {
+    protected $qrcodeModel;
+
+    public function __construct()
+    {
+        $this->qrcodeModel = new \App\Models\QRCode();
+    }
+
     public function index()
     {
         $key = getenv("jwt_key");
 
-        $qrCode = new \App\Models\QRCode();
-
-        $dataBefore = $qrCode->where('tanggal_aktif', date("Y-m-d", time()))->first();
+        $dataBefore = $this->qrcodeModel->where('tanggal_aktif', date("Y-m-d", time()))->first();
 
         if (!$dataBefore) {
             $faker = Factory::create();
@@ -28,7 +33,7 @@ class QRCodeController extends BaseController
             ];
 
             $jwt = JWT::encode($barcodeData, $key, 'HS256');
-            $qrCode->insert([
+            $this->qrcodeModel->insert([
                 'key_qrcode' => $jwt,
                 'tanggal_aktif' => $tanggal,
             ]);

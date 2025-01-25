@@ -8,6 +8,15 @@ use App\Models\QRCode;
 
 class AbsensiController extends BaseController
 {
+    protected $absensiModel;
+    protected $qrcodeModel;
+
+    public function __construct()
+    {
+        $this->absensiModel = new Absensi();
+        $this->qrcodeModel = new QRCode();
+    }
+
     public function setAbsensi()
     {
         $jwt = $this->request->getVar("qrcode");
@@ -19,10 +28,9 @@ class AbsensiController extends BaseController
             return $this->fail("QRCode invalid/expire");
         };
 
-        $absensi = new Absensi();
         $time = time();
 
-        $absensiBefore = $absensi->where("id_user", $id_user)->where('tanggal', date("Y-m-d", $time))->first();
+        $absensiBefore = $this->absensiModel->where("id_user", $id_user)->where('tanggal', date("Y-m-d", $time))->first();
         if ($absensiBefore) {
             return $this->fail("Anda sudah absen hari ini");
         }
@@ -44,7 +52,7 @@ class AbsensiController extends BaseController
             'tanggal' => $tanggal,
             'timestamp' => $timestamp
         ];
-        $result = $absensi->insert($data);
+        $result = $this->absensiModel->insert($data);
 
         if ($result) {
             return $this->respond(['messages' => "Anda Berhasil Absensi"]);
@@ -55,12 +63,10 @@ class AbsensiController extends BaseController
 
     public function getAbsensi($id_user = null)
     {
-        $absensi = new Absensi();
-
         if ($id_user != null) {
-            $absensiUser = $absensi->where("id_user", $id_user)->findAll();
+            $absensiUser = $this->absensiModel->where("id_user", $id_user)->findAll();
         } else {
-            $absensiUser = $absensi->findAll();
+            $absensiUser = $this->absensiModel->findAll();
         }
 
         array_map(function ($item) {
@@ -75,11 +81,9 @@ class AbsensiController extends BaseController
     {
         $jwt = $this->request->getVar("qrcode");
 
-        $qrcode = new QRCode();
-
-        if ($qrcode->orderBy("id_qrcode", "DESC")->first()->key_qrcode != $jwt) {
+        if ($this->qrcodeModel->orderBy("id_qrcode", "DESC")->first()->key_qrcode != $jwt) {
             return $this->fail("QRCode invalid/expire");
         }
-        return $this->respond(["messages" => "Anda berhasil melakukan absensi"]);
+        return $this->respond(["messages" => "Anda berhasil melakukan this->absensiModel"]);
     }
 }

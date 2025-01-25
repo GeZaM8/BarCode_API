@@ -3,6 +3,7 @@
 use App\Controllers\Api\AbsensiController;
 use App\Controllers\Api\Auth;
 use App\Controllers\Api\QRCodeController;
+use App\Controllers\Api\SiswaController;
 use App\Controllers\Api\UserController;
 use App\Controllers\Web\AuthController;
 use App\Controllers\Web\Dashboard\AdminBackendController;
@@ -31,9 +32,9 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
     $routes->get("/absensi/(:num)", [AbsensiController::class, "getAbsensi/$1"]);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
 
-    $routes->post("/update/siswa", [UserController::class, "updateUser"]);
+    $routes->post("/update/siswa", [SiswaController::class, "updateSiswa"]);
 
-    $routes->get("siswa/(:num)", [UserController::class, "getSiswa/$1"]);
+    $routes->get("siswa/(:num)", [SiswaController::class, "getSiswa/$1"]);
 });
 
 //============================================//
