@@ -81,6 +81,30 @@
   </div>
 </div>
 
+<div class="modal fade" id="password-modal" tabindex="-1" aria-labelledby="save-users" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="password-form" onsubmit="changePasswordUser(event)" action method="post">
+        <div class=" modal-header">
+          <h1 class="modal-title fs-5" id="modal-title">Ubah Password</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="hidden" class="form-control" id="id_user" name="id_user">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
@@ -96,7 +120,9 @@
   let role = $('#role_filter');
   let kelas = $('#class');
   let editModal = $('#edit-modal');
+  let passModal = $('#password-modal');
   let editForm = $('#edit-form');
+  let passForm = $('#password-form');
   let roleUser = $('input[name="id_role"]');
   let expandForm = $('#expand-data');
 
@@ -110,8 +136,39 @@
       editForm.attr('action', '<?= admin_url('api/add-users') ?>');
       return;
     }
+  }
 
+  function openPasswordModal(id) {
+    passModal.modal('show');
+    passModal.find('#modal-title').text('Ubah Password');
+    passForm.trigger('reset');
+    passForm.find('#id_user').val(id);
+  }
 
+  function changePasswordUser(e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: '<?= admin_url('api/change-password-users/') ?>',
+      method: 'POST',
+      dataType: 'json',
+      data: passForm.serialize(),
+      beforeSend: function() {
+        $('.btn').attr('disabled', true);
+        loading.removeClass("d-none");
+      },
+      complete: function() {
+        loading.addClass("d-none");
+        $('.btn').attr('disabled', false);
+      },
+      error: function(err) {
+        toastFailRequestTop(err);
+      },
+      success: function(data) {
+        toastSuccessRequestTop(data.message);
+        passModal.modal('hide');
+      }
+    })
   }
 
   function formHandle(e) {
@@ -122,6 +179,30 @@
       method: 'POST',
       dataType: 'json',
       data: editForm.serialize(),
+      beforeSend: function() {
+        $('.btn').attr('disabled', true);
+        loading.removeClass("d-none");
+      },
+      complete: function() {
+        loading.addClass("d-none");
+        $('.btn').attr('disabled', false);
+      },
+      error: function(err) {
+        toastFailRequest(err);
+      },
+      success: function(data) {
+        toastSuccessRequest(data.message);
+        editModal.modal('hide');
+        requestBackend();
+      }
+    })
+  }
+
+  function deleteUser(id) {
+    $.ajax({
+      url: '<?= admin_url('api/delete-users/') ?>' + id,
+      method: 'DELETE',
+      dataType: 'json',
       beforeSend: function() {
         $('.btn').attr('disabled', true);
         loading.removeClass("d-none");
@@ -186,6 +267,7 @@
                     <th scope="col">No. Absen</th>
                     <th scope="col">NIS</th>
                     <th scope="col">NISN</th>
+                    <th scope="col">Aksi</th>
                   </tr>
                 `);
             users.forEach((item, index) => {
@@ -200,6 +282,10 @@
                     <td>${item.no_absen ?? "-"}</td>
                     <td>${item.nis ?? "-"}</td>
                     <td>${item.nisn ?? "-"}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
+                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
+                    </td>
                   </tr>
                 `);
             })
@@ -212,6 +298,7 @@
                     <th scope="col">Nama</th>
                     <th scope="col">Email</th>
                     <th scope="col">NIP</th>
+                    <th scope="col">Aksi</th>
                   </tr>
                 `);
             users.forEach((item, index) => {
@@ -222,6 +309,10 @@
                     <td>${item.nama ?? "-"}</td>
                     <td>${item.email}</td>
                     <td>${item.nip ?? "-"}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
+                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
+                    </td>
                   </tr>
                 `);
             })
@@ -232,6 +323,7 @@
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Aksi</th>
                   </tr>
                 `);
             users.forEach((item, index) => {
@@ -240,6 +332,10 @@
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
                     <td>${item.email}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
+                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
+                    </td>
                   </tr>
                 `);
             })
@@ -252,6 +348,7 @@
                     <th scope="col">Nama</th>
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
+                    <th scope="col">Aksi</th>
                   </tr>
                 `);
             users.forEach((item, index) => {
@@ -260,8 +357,12 @@
                     <th scope="row">${index + 1}</th>
                     <td>${item.id_user}</td>
                     <td>${item.nama ?? "-"}</td>
-                    <td>${item.email}</td>
+                    <td>${item.email ?? "-"}</td>
                     <td>${item.name_role}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
+                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
+                    </td>
                   </tr>
                 `);
             })
