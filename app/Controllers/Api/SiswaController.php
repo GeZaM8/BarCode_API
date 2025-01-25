@@ -3,19 +3,19 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\User;
-use App\Models\USiswa;
 use Exception;
 
 class SiswaController extends BaseController
 {
     protected $userModel;
     protected $siswaModel;
+    protected $kelasModel;
 
     public function __construct()
     {
-        $this->userModel = new User();
-        $this->siswaModel = new USiswa();
+        $this->userModel = new \App\Models\User();
+        $this->siswaModel = new \App\Models\USiswa();
+        $this->kelasModel = new \App\Models\Kelas();
     }
 
     public function updateSiswa()
@@ -30,15 +30,14 @@ class SiswaController extends BaseController
         $no_absen = $dataJson->absen;
         $nis = $dataJson->nis;
         $nisn = $dataJson->nisn;
+        $id_kelas = $this->kelasModel->where("kelas", $kelas)->first()->id_kelas;
+        if (empty($id_kelas)) return $this->fail("Kelas tidak ditemukan");
+
         $img = $this->request->getFile("foto");
-
         $photoOld = $this->siswaModel->where("id_user", $id_user)->first()->foto;
-
         $photo = $img->getRandomName();
-
         $allowedExtensions = ['png', 'jpg', 'jpeg', 'webp'];
         $extension = $img->getExtension();
-
         if (!in_array($extension, $allowedExtensions)) {
             return $this->fail("Gambar hanya boleh png, jpg, jpeg, dan webp");
         }
@@ -48,7 +47,7 @@ class SiswaController extends BaseController
         ];
         $dataSiswa = [
             "nama" => $nama,
-            "id_kelas" => $kelas,
+            "id_kelas" => $id_kelas,
             "no_absen" => $no_absen,
             "nis" => $nis,
             "nisn" => $nisn,
@@ -79,8 +78,6 @@ class SiswaController extends BaseController
 
     public function getSiswa($id)
     {
-        $this->siswaModel = new USiswa();
-
         $siswa = $this->siswaModel->getSiswaWithDetails()->where("u_siswa.id_user", $id)->first();
         $siswa->foto = base_url("assets/upload/" . $siswa->foto);
 
