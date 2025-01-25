@@ -3,6 +3,7 @@
 namespace App\Controllers\Web\Dashboard;
 
 use App\Controllers\BaseController;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AdminBackendController extends BaseController
@@ -120,6 +121,23 @@ class AdminBackendController extends BaseController
     // Edit Data
     // ======================================================================
 
+    public function changePasswordUser()
+    {
+        $data = (array) $this->request->getVar();
+
+        $user = $this->userModel->where("id_user", $data['id_user'])->first();
+
+        if (empty($user))
+            return $this->respond(['message' => 'User Tidak Ditemukan'], 404);
+
+        if (empty($user->email))
+            return $this->respond(['message' => 'User perlu diaktivasi dulu'], 404);
+
+        $this->userModel->save($data);
+
+        return $this->respond(['message' => 'Success Update Password']);
+    }
+
     public function editKelas($id)
     {
         $data = $this->request->getVar();
@@ -187,7 +205,7 @@ class AdminBackendController extends BaseController
                     break;
             }
             return $this->respond(['message' => 'Success Add User']);
-        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+        } catch (DatabaseException $e) {
             $this->userModel->delete($id_user);
             return $this->respond(['message' => $e->getMessage()], 500);
         }
@@ -214,6 +232,18 @@ class AdminBackendController extends BaseController
     // ======================================================================
     // Delete Data
     // ======================================================================
+
+    public function deleteUser($id)
+    {
+        try {
+            $this->userSiswaModel->where("id_user", $id)->delete();
+            $this->userGuruModel->where("id_user", $id)->delete();
+            $this->userModel->delete($id);
+            return $this->respond(['message' => 'Success Delete User']);
+        } catch (DatabaseException $e) {
+            return $this->respond(['message' => $e->getMessage()], 500);
+        }
+    }
 
     public function deleteKelas($id)
     {
