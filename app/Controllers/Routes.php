@@ -8,6 +8,7 @@ use App\Controllers\Api\UserController;
 use App\Controllers\Web\AuthController;
 use App\Controllers\Web\Dashboard\AdminBackendController;
 use App\Controllers\Web\Dashboard\AdminController;
+use App\Controllers\Web\Dashboard\TeacherBackendController;
 use App\Controllers\Web\Dashboard\TeacherController;
 use CodeIgniter\Router\RouteCollection;
 
@@ -79,5 +80,19 @@ $routes->group("web", static function (RouteCollection $routes) {
     $routes->group("teacher", ['filter' => 'DashboardAccess:2'], static function (RouteCollection $routes) {
         $routes->get("/", [TeacherController::class, "index"]);
         $routes->get("logout", [TeacherController::class, "logout"]);
+        $routes->get("presence", [TeacherController::class, "presence"]);
+        $routes->get("users", [TeacherController::class, "users"]);
+        $routes->get("kelas", [TeacherController::class, "kelas"]);
+        $routes->get("jurusan", [TeacherController::class, "jurusan"]);
+        $routes->get("logout", [TeacherController::class, "logout"]);
+
+        $routes->group("api", static function (RouteCollection $routes) {
+            $routes->get("get-presence", [TeacherBackendController::class, "getPresence"]);
+            $routes->get("get-users", [TeacherBackendController::class, "getUsers"]);
+            $routes->get("get-kelas/(:num)", [TeacherBackendController::class, "getKelas/$1"]);
+            $routes->get("get-kelas", [TeacherBackendController::class, "getKelas"]);
+            $routes->get("get-jurusan/(:segment)", [TeacherBackendController::class, "getJurusan/$1"]);
+            $routes->get("get-jurusan", [TeacherBackendController::class, "getJurusan"]);
+        });
     });
 });
