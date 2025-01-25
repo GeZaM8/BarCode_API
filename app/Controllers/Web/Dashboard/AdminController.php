@@ -15,7 +15,7 @@ class AdminController extends BaseController
 
     public function __construct()
     {
-        helper('weburl');
+        helper(['weburl', 'user']);
         $this->absenModel   = new \App\Models\Absensi();
         $this->kelasModel   = new \App\Models\Kelas();
         $this->userModel    = new \App\Models\User();
