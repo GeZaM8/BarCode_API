@@ -63,6 +63,7 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->get("get-jurusan/(:segment)", [AdminBackendController::class, "getJurusan/$1"]);
             $routes->get("get-jurusan", [AdminBackendController::class, "getJurusan"]);
 
+            $routes->post("change-password-users", [AdminBackendController::class, "changePasswordUser"]);
             $routes->post("edit-kelas/(:num)", [AdminBackendController::class, "editKelas/$1"]);
             $routes->post("edit-jurusan/(:segment)", [AdminBackendController::class, "editJurusan/$1"]);
 
@@ -70,6 +71,7 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->post("add-kelas", [AdminBackendController::class, "addKelas"]);
             $routes->post("add-jurusan", [AdminBackendController::class, "addJurusan"]);
 
+            $routes->delete("delete-users/(:num)", [AdminBackendController::class, "deleteUser/$1"]);
             $routes->delete("delete-kelas/(:num)", [AdminBackendController::class, "deleteKelas/$1"]);
             $routes->delete("delete-jurusan/(:segment)", [AdminBackendController::class, "deleteJurusan/$1"]);
         });
