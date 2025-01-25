@@ -11,7 +11,6 @@
     </div>
   </div>
   <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-success" id="add" onclick="openData()">Tambah</button>
     <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
     <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
   </div>
@@ -47,46 +46,12 @@
   </table>
 </div>
 
-<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="save-users" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="edit-form" onsubmit="formHandle(event)" action method="post">
-        <div class=" modal-header">
-          <h1 class="modal-title fs-5" id="modal-title">Tambah Users</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            Role:
-            <?php foreach ($roles as $r): ?>
-              <input type="radio" value="<?= $r->id_role ?>" class="btn-check" name="id_role" id="id-role-<?= $r->id_role ?>" autocomplete="off">
-              <label class="btn btn-sm btn-outline-primary" for="id-role-<?= $r->id_role ?>"><?= $r->name_role ?></label>
-            <?php endforeach; ?>
-          </div>
-
-          <div class="mb-3">
-            <label for="nama" class="form-label">Nama</label>
-            <input type="text" class="form-control" id="nama" name="nama">
-          </div>
-          <div id="expand-data">
-
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
 
 <script>
-  let baseUrl = "<?= admin_url() ?>";
+  let baseUrl = "<?= teacher_url() ?>";
   let table = $('#data-table');
   let head = $('#head-table');
   let loading = $('#loading');
@@ -95,56 +60,12 @@
   let refresh = $('#refresh');
   let role = $('#role_filter');
   let kelas = $('#class');
-  let editModal = $('#edit-modal');
-  let editForm = $('#edit-form');
   let roleUser = $('input[name="id_role"]');
   let expandForm = $('#expand-data');
 
-  function openData(id = null) {
-    editModal.modal('show');
-    editModal.find('#modal-title').text('Tambah Users');
-    editForm.trigger('reset');
-    expandForm.html('');
-
-    if (id == null) {
-      editForm.attr('action', '<?= admin_url('api/add-users') ?>');
-      return;
-    }
-
-
-  }
-
-  function formHandle(e) {
-    e.preventDefault();
-
-    $.ajax({
-      url: editForm.attr('action'),
-      method: 'POST',
-      dataType: 'json',
-      data: editForm.serialize(),
-      beforeSend: function() {
-        $('.btn').attr('disabled', true);
-        loading.removeClass("d-none");
-      },
-      complete: function() {
-        loading.addClass("d-none");
-        $('.btn').attr('disabled', false);
-      },
-      error: function(err) {
-        toastFailRequest(err);
-      },
-      success: function(data) {
-        toastSuccessRequest(data.message);
-        editModal.modal('hide');
-        requestBackend();
-      }
-    })
-  }
-
-
   function requestBackend() {
     $.ajax({
-      url: '<?= admin_url('api/get-users') ?>',
+      url: '<?= teacher_url('api/get-users') ?>',
       method: 'GET',
       dataType: 'json',
       data: {
