@@ -46,7 +46,7 @@ class Absensi extends Model
 
     public function withDetailUsers()
     {
-        return $this->select("absensi.*, u.*, us.nama, us.id_kelas, us.kode_jurusan, us.no_absen, us.nis, us.nisn, us.foto as foto_profile, k.kelas, month(tanggal) as bulan, year(tanggal) as tahun")
+        return $this->select("absensi.*, u.email, u.id_role, us.nama, us.id_kelas, us.kode_jurusan, us.no_absen, us.nis, us.nisn, us.foto as foto_profile, k.kelas, month(tanggal) as bulan, year(tanggal) as tahun")
             ->join('users u', 'u.id_user = absensi.id_user', 'left')
             ->join('u_siswa us', 'us.id_user = absensi.id_user', 'left')
             ->join('kelas k', 'k.id_kelas = us.id_kelas', 'left');

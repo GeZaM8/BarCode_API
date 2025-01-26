@@ -47,6 +47,7 @@ class USiswa extends Model
     public function getSiswaWithDetails()
     {
         $builder = $this
+            ->select("u_siswa.*, k.*, j.*, u.id_user, u.email, u.id_role")
             ->join("kelas k", "u_siswa.id_kelas = k.id_kelas", "left")
             ->join("jurusan j", "u_siswa.kode_jurusan = j.kode_jurusan", "left")
             ->join("users u", "u_siswa.id_user = u.id_user");

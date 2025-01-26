@@ -32,10 +32,11 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
     $routes->post("/validate/qrcode", [AbsensiController::class, "validateQRCode"]);
 
     $routes->post("/absensi", [AbsensiController::class, "setAbsensi"]);
-    $routes->get("/absensi/(:num)", [AbsensiController::class, "getAbsensi/$1"]);
+    $routes->get("/absensi/(:num)/(:num)", [[AbsensiController::class, "getAbsensi"], '$1/$2']);
+    $routes->get("/absensi/(:num)", [[AbsensiController::class, "getAbsensi"], '$1']);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
 
-    $routes->get("/siswa/(:num)", [SiswaController::class, "getSiswa/$1"]);
+    $routes->get("/siswa/(:num)", [[SiswaController::class, "getSiswa"], '$1']);
     $routes->post("/update/siswa", [SiswaController::class, "updateSiswa"]);
 
     $routes->get("/kelas", [KelasController::class, "getKelas"]);
