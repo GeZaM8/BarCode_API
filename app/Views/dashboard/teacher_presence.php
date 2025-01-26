@@ -62,6 +62,7 @@
     <thead>
       <tr>
         <th scope="col">#</th>
+        <th scope="col">Foto</th>
         <th scope="col">Nama</th>
         <th scope="col">Email</th>
         <th scope="col">Kelas</th>
@@ -135,9 +136,16 @@
 
           let html = '';
           presence.forEach((item, index) => {
+            console.log(item)
             html += `
             <tr>
               <th scope="row">${index + 1}</th>
+              <td>
+                ${item.foto ? 
+                  `<a href='<?= base_url("assets/upload/absensi/") ?>${item.foto}'>
+                    <img src='<?= base_url("assets/upload/absensi/") ?>${item.foto}' width='50%' />
+                  </a>` : `-`}
+              </td>
               <td>${item.nama}</td>
               <td>${item.email}</td>
               <td>${item.kelas}</td>

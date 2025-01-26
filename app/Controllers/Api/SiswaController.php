@@ -57,11 +57,11 @@ class SiswaController extends BaseController
         $updateSiswa = $this->siswaModel->update($id_user, $dataSiswa);
 
         if ($updateSiswa) {
-            $img->move("assets/upload", $photo);
+            $img->move("assets/upload/profile/", $photo);
 
             try {
                 if (!empty($photoOld))
-                    unlink("assets/upload/" . $photoOld);
+                    unlink("assets/upload/profile/" . $photoOld);
             } catch (Exception $e) {
             }
 
@@ -79,7 +79,7 @@ class SiswaController extends BaseController
     public function getSiswa($id)
     {
         $siswa = $this->siswaModel->getSiswaWithDetails()->where("u_siswa.id_user", $id)->first();
-        $siswa->foto = base_url("assets/upload/" . $siswa->foto);
+        $siswa->foto = base_url("assets/upload/profile/" . $siswa->foto);
 
         return $this->respond($siswa);
     }
