@@ -9,13 +9,20 @@ use Exception;
 
 class Auth extends BaseController
 {
+    protected $siswaModel;
+    protected $userModel;
+
+    public function __construct()
+    {
+        $this->siswaModel = new USiswa();
+        $this->userModel = new User();
+    }
     public function login()
     {
         $email = $this->request->getVar("email");
         $password = $this->request->getVar("password");
 
-        $userModel = new User();
-        $user = $userModel->getUsersWithDetails()->where("email", $email)->where("u.id_role", 1)->get()->getRowObject();
+        $user = $this->userModel->getUsersWithDetails()->where("email", $email)->where("u.id_role", 1)->get()->getRowObject();
 
         if (!$user)
             return $this->fail("Email atau Password Salah");
@@ -26,45 +33,24 @@ class Auth extends BaseController
         }
     }
 
-    public function registerSiswa()
+    public function aktivasiSiswa()
     {
-        $dataUser = [
+        $nis = $this->request->getVar("nis");
+        $nisn = $this->request->getVar("nisn");
+
+        $dataUpdate = [
             "email" => $this->request->getVar("email"),
             "password" => $this->request->getVar("password"),
-            "id_role" => "1"
         ];
 
-        $db = \Config\Database::connect();
-        $db->transBegin();
+        $siswa = $this->siswaModel->getSiswaWithDetails()->where(["nis" => $nis, "nisn" => $nisn])->first();
+        if (!empty($siswa->email))
+            return $this->fail("Akun ini sudah diaktivasi");
+        $userUpdate = $this->userModel->update($siswa->id_user, $dataUpdate);
 
-        $userModel = new User();
-        $siswaModel = new USiswa();
-
-        $insertUser = $userModel->insert($dataUser);
-
-        if ($insertUser) {
-            $dataSiswa = [
-                "id_user" => $insertUser,
-                "nama" => $this->request->getVar("nama"),
-                "id_kelas" => $this->request->getVar("kelas"),
-                "kode_jurusan" => $this->request->getVar("kode_jurusan"),
-                "no_absen" => $this->request->getVar("no_absen"),
-                "nis" => $this->request->getVar("nis"),
-                "nisn" => $this->request->getVar("nisn")
-            ];
-
-            $insertSiswa = $siswaModel->insert($dataSiswa);
-
-            if ($insertSiswa) {
-                $db->transCommit();
-                return $this->respond(['messages' => "Register Berhasil"]);
-            } else {
-                $db->transRollback();
-                return $this->fail("NIS, NISN, atau Nomor Absen sudah Terdaftar");
-            }
-        } else {
-            $db->transRollback();
-            return $this->fail("Email sudah Terdaftar");
-        }
+        if ($userUpdate)
+            return $this->respond(["messages" => "Aktivasi Berhasil"]);
+        else
+            return $this->fail("Terjadi kesalahan saat aktivasi");
     }
 }
