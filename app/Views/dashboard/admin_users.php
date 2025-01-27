@@ -149,7 +149,7 @@
     e.preventDefault();
 
     $.post({
-      url: '<?= admin_url('api/change-password-user/') ?>',
+      url: '<?= admin_url('api/change-password-user') ?>',
       dataType: 'json',
       data: passForm.serialize(),
       beforeSend: function() {
