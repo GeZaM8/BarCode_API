@@ -46,6 +46,8 @@ class Auth extends BaseController
         $siswa = $this->siswaModel->getSiswaWithDetails()->where(["nis" => $nis, "nisn" => $nisn])->first();
         if (!empty($siswa->email))
             return $this->fail("Akun ini sudah diaktivasi");
+        if (empty($siswa))
+            return $this->fail("Tidak ditemukan siswa dengan NIS: $nis dan NISN: $nisn\nHubungi operator untuk pembuatan akun");
         $userUpdate = $this->userModel->update($siswa->id_user, $dataUpdate);
 
         if ($userUpdate)
