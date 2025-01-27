@@ -148,9 +148,8 @@
   function changePasswordUser(e) {
     e.preventDefault();
 
-    $.ajax({
+    $.post({
       url: '<?= admin_url('api/change-password-user/') ?>',
-      method: 'POST',
       dataType: 'json',
       data: passForm.serialize(),
       beforeSend: function() {
@@ -168,7 +167,7 @@
         toastSuccessRequestTop(data.message);
         passModal.modal('hide');
       }
-    })
+    });
   }
 
   function formHandle(e) {
