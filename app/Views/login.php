@@ -31,9 +31,6 @@
             <input type="password" class="form-control" id="password" name="password">
           </div>
           <button type="submit" class="btn btn-success w-100 d-block">Login</button>
-
-          <small class="mt-3 d-block">Activate your account here, <a href="<?= base_url("web/activate") ?>">Activate</a></small>
-
         </div>
       </form>
     </div>
