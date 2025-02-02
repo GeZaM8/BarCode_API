@@ -85,6 +85,8 @@
 <?= $this->section('scripts'); ?>
 <script>
   $(document).ready(function() {
+    const urlbase = new URL(window.location.href);
+
     function requestBackend() {
       let year = $('#year').val();
       let month = $('#month').val();
@@ -166,6 +168,23 @@
     // Filter Handler
     // ==========================================
 
+    function setParams() {
+      urlbase.searchParams.set('year', $('#year').val());
+      urlbase.searchParams.set('month', $('#month').val());
+      urlbase.searchParams.set('day', $('#day').val());
+      window.history.replaceState(null, null, urlbase);
+    }
+
+    function getFilterByParams() {
+      $('#year').val(urlbase.searchParams.get('year'));
+      yearChanged();
+      $('#month').val(urlbase.searchParams.get('month'));
+      monthChanged();
+      $('#day').val(urlbase.searchParams.get('day'));
+
+      requestBackend();
+    }
+
     function yearChanged() {
       $('#day').html('<option selected disabled>Pilih bulan terlebih dahulu</option>');
       $('#month').html('<option selected disabled>Pilih bulan</option>');
@@ -192,10 +211,16 @@
       $('#day').val(<?= date('d') ?>);
       $('#class').val($('#class option:first').val());
 
+      setParams()
+
       requestBackend();
     }
 
-    defaultFilter();
+    if (urlbase.searchParams.get('year') || urlbase.searchParams.get('month') || urlbase.searchParams.get('day')) {
+      getFilterByParams();
+    } else {
+      defaultFilter();
+    }
 
     // ==========================================
     // Event Handler
@@ -203,15 +228,18 @@
 
     $('#year').on('change', function() {
       yearChanged();
+      setParams();
       requestBackend();
     })
 
     $('#month').on('change', function() {
       monthChanged();
+      setParams();
       requestBackend();
     })
 
     $('#day').on('change', function() {
+      setParams();
       requestBackend();
     })
 
