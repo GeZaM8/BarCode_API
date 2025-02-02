@@ -4,15 +4,15 @@
 
 <style>
   .card-title {
-    font-size: 5rem;
+    font-size: 2.5rem;
     margin: 0;
   }
 
   .icon-bg {
     position: absolute;
-    top: 4px;
+    top: -8px;
     right: -4px;
-    font-size: 7rem;
+    font-size: 5rem;
     opacity: 0.3;
     margin: 0;
   }
@@ -25,20 +25,37 @@
   a {
     text-decoration: none;
   }
+
+  .chartWrapper {
+    height: 500px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .chartWrapper {
+      height: 360px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+  }
 </style>
 
 <?= $this->endSection(); ?>
 
 <?= $this->section('content'); ?>
 
-<h1 class="mt-4 mb-3">Welcome, <?= session()->get("auth_login")['email'] ?></h1>
+<h6 class="mt-1 mb-2 text-end">Welcome, <?= session()->get("auth_login")['email'] ?></h6>
 
 <h3 class="mb-1">Kehadiran</h3>
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-1">
-  <div class="col mb-3">
-    <div class="card">
+<div class="d-flex flex-column flex-md-row align-items-stretch gap-3">
+  <div style="flex: 2;" class="order-2 order-md-1">
+    <div class="card mb-3">
       <div class="card-header">
-        Hadir
+        Hadir Tepat Waktu
       </div>
       <div class="card-body">
         <h1 class="card-title" id="hadir">Loading...</h1>
@@ -51,9 +68,8 @@
         </div>
       </a>
     </div>
-  </div>
-  <div class="col mb-3">
-    <div class="card">
+
+    <div class="card mb-3">
       <div class="card-header">
         Terlambat
       </div>
@@ -68,9 +84,8 @@
         </div>
       </a>
     </div>
-  </div>
-  <div class="col mb-3">
-    <div class="card">
+
+    <div class="card mb-3">
       <div class="card-header">
         Tidak Hadir
       </div>
@@ -86,7 +101,14 @@
       </a>
     </div>
   </div>
+  <div style="flex: 3;" class="order-1 order-md-2">
+    <div class="chartWrapper">
+      <canvas id="chartContainer" style="width: 100%;"></canvas>
+    </div>
+  </div>
 </div>
+
+
 
 <h3 class="mb-1">Data</h3>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-1">
@@ -128,6 +150,7 @@
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   $(document).ready(function() {
     $.ajax({
@@ -159,9 +182,56 @@
           })
         }
 
-        $('#hadir').text(presence.filter(presence => presence.status == 'Hadir').length);
-        $('#terlambat').text(presence.filter(presence => presence.status == 'Terlambat').length);
-        $('#tidak-hadir').text(presence.filter(presence => presence.status == 'Tidak Hadir').length);
+        const hadir = presence.filter(presence => presence.status == 'Hadir').length;
+        const terlambat = presence.filter(presence => presence.status == 'Terlambat').length;
+        const tidakHadir = presence.filter(presence => presence.status == 'Tidak Hadir').length;
+
+        $('#hadir').text(hadir);
+        $('#terlambat').text(terlambat);
+        $('#tidak-hadir').text(tidakHadir);
+
+        const chartData = [{
+            status: "Tepat Waktu",
+            count: hadir
+          },
+          {
+            status: "Terlambat",
+            count: terlambat
+          },
+          {
+            status: "Tidak Hadir",
+            count: tidakHadir
+          },
+        ];
+
+        new Chart(
+          document.getElementById("chartContainer"), {
+            type: 'pie',
+            data: {
+              labels: chartData.map(row => row.status),
+              datasets: [{
+                label: 'Total',
+                data: chartData.map(row => row.count),
+                backgroundColor: [
+                  'rgb(10, 211, 74)',
+                  'rgb(255, 205, 86)',
+                  'rgb(248, 83, 119)',
+                ]
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  labels: {
+                    font: {
+                      size: 14,
+                    },
+                    color: '#fff'
+                  }
+                }
+              }
+            }
+          });
       }
     });
   });
