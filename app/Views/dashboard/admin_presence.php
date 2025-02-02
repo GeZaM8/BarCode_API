@@ -13,7 +13,15 @@
 
 <div class="d-flex justify-content-between align-items-center mb-2 gap-5">
   <div class="d-flex align-items-center gap-3">
-    <h1>Kehadiran</h1>
+    <h1>Kehadiran Kelas</h1>
+    <div>
+      <select class="form-select" aria-label="Select Class" id="class">
+        <option selected value="">Pilih Kelas</option>
+        <?php foreach ($class as $c): ?>
+          <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
     <div class="spinner-border text-primary" role="status" id="loading">
       <span class="visually-hidden">Loading...</span>
     </div>
@@ -24,15 +32,6 @@
   </div>
 </div>
 <div class="row mb-2">
-  <div class="col-md-3 mb-3">
-    <label for="class" class="form-label">Kelas</label>
-    <select class="form-select" aria-label="Select Class" id="class">
-      <option selected disabled>Pilih Kelas</option>
-      <?php foreach ($class as $c): ?>
-        <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
-      <?php endforeach; ?>
-    </select>
-  </div>
   <div class="col-md-3 mb-3">
     <label for="year" class="form-label">Tahun</label>
     <select class="form-select" aria-label="Select Year" id="year">
@@ -54,10 +53,24 @@
       <option selected disabled>Pilih bulan terlebih dahulu</option>
     </select>
   </div>
-
+  <div class="col-md-3 mb-3">
+    <label for="Status" class="form-label">Status</label>
+    <select class="form-select" aria-label="Select Status" id="status">
+      <option selected value="">Pilih Status</option>
+      <option value="Hadir">Hadir</option>
+      <option value="Terlambat">Terlambat</option>
+      <option value="Tidak Hadir">Tidak Hadir</option>
+    </select>
+  </div>
 </div>
 
-<div class="table-responsive">
+<div class="row row-cols-1 row-cols-md-4">
+  <h5 class="mb-1"><span class="badge text-bg-success">Hadir: <span id="hadir">-</span></span></h5>
+  <h5 class="mb-1"><span class="badge text-bg-warning">Terlambat: <span id="terlambat">-</span></span></h5>
+  <h5 class="mb-1"><span class="badge text-bg-danger">Tidak Hadir: <span id="tidak-hadir">-</span></span></h5>
+</div>
+
+<div class="table-responsive mt-3">
   <table class="table">
     <thead>
       <tr>
@@ -86,6 +99,7 @@
 <script>
   $(document).ready(function() {
     const urlbase = new URL(window.location.href);
+    let presence;
 
     function requestBackend() {
       let year = $('#year').val();
@@ -101,7 +115,7 @@
           year,
           month,
           day,
-          kelas
+          kelas,
         },
         beforeSend: function() {
           $('#filter').attr('disabled', true);
@@ -120,25 +134,39 @@
           toastSuccessRequest();
 
           let student = data.student;
-          let presence = data.presence;
+          presence = data.presence;
 
           if (student.length > 0) {
-            presence = student.map((item, index) => {
-              const presenceCheck = presence.find(presence => presence.id_user == item.id_user);
+            presence = student.map((user, index) => {
+              const presenceCheck = presence.find(presence => presence.id_user == user.id_user);
 
               return {
-                ...item,
-                ...presenceCheck,
+                ...user,
                 tanggal: presenceCheck ? presenceCheck.tanggal : $('#year').val() + '-' + (0 + $('#month').val()).slice(-2) + '-' + (0 + $('#day').val()).slice(-2),
                 status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
               }
             })
           }
 
+          $('#hadir').text(presence.filter(presence => presence.status == 'Hadir').length);
+          $('#terlambat').text(presence.filter(presence => presence.status == 'Terlambat').length);
+          $('#tidak-hadir').text(presence.filter(presence => presence.status == 'Tidak Hadir').length);
 
-          let html = '';
-          presence.forEach((item, index) => {
-            html += `
+          renderTable();
+        }
+      })
+    }
+
+    function renderTable() {
+      let copyPresence = presence;
+
+      if ($('#status').val()) {
+        copyPresence = presence.filter(presence => presence.status == $('#status').val());
+      }
+
+      let html = '';
+      copyPresence.forEach((item, index) => {
+        html += `
             <tr>
               <th scope="row">${index + 1}</th>
               <td>
@@ -154,14 +182,12 @@
               <td>${item.no_absen}</td>
               <td>${item.timestamp ?? '-'}</td>
               <td>${item.mood ?? '-'}</td>
-              <td><span class="badge text-${item.status == 'Hadir' ? 'bg-success' : 'bg-danger'}">${item.status}</span></td>
+              <td><span class="badge text-${item.status == 'Hadir' ? 'bg-success' : item.status == 'Terlambat' ? 'bg-warning' : 'bg-danger'}">${item.status}</span></td>
               <td>${item.tanggal ?? '-'}</td>
             </tr>
             `;
-          });
-          $('#data-table').html(html);
-        }
-      })
+      });
+      $('#data-table').html(html);
     }
 
     // ==========================================
@@ -172,6 +198,8 @@
       urlbase.searchParams.set('year', $('#year').val());
       urlbase.searchParams.set('month', $('#month').val());
       urlbase.searchParams.set('day', $('#day').val());
+      urlbase.searchParams.set('kelas', $('#class').val());
+      urlbase.searchParams.set('status', $('#status').val());
       window.history.replaceState(null, null, urlbase);
     }
 
@@ -181,6 +209,8 @@
       $('#month').val(urlbase.searchParams.get('month'));
       monthChanged();
       $('#day').val(urlbase.searchParams.get('day'));
+      $('#class').val(urlbase.searchParams.get('kelas'));
+      $('#status').val(urlbase.searchParams.get('status'));
 
       requestBackend();
     }
@@ -209,14 +239,15 @@
       $('#month').val(<?= date('m') ?>);
       monthChanged();
       $('#day').val(<?= date('d') ?>);
-      $('#class').val($('#class option:first').val());
+      $('#class').val('');
+      $('#status').val('');
 
       setParams()
 
       requestBackend();
     }
 
-    if (urlbase.searchParams.get('year') || urlbase.searchParams.get('month') || urlbase.searchParams.get('day')) {
+    if (urlbase.searchParams.get('year') || urlbase.searchParams.get('month') || urlbase.searchParams.get('day') || urlbase.searchParams.get('kelas') || urlbase.searchParams.get('status')) {
       getFilterByParams();
     } else {
       defaultFilter();
@@ -244,7 +275,13 @@
     })
 
     $('#class').on('change', function() {
+      setParams();
       requestBackend();
+    })
+
+    $('#status').on('change', function() {
+      setParams();
+      renderTable();
     })
 
     $('#filter').on('click', defaultFilter)
