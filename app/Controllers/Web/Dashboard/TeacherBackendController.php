@@ -72,6 +72,13 @@ class TeacherBackendController extends BaseController
         return $this->respond($payload);
     }
 
+    public function getPresenceDetail($id)
+    {
+        $result = $this->absenModel->withDetailUsers()->where("id_absensi", $id)->first();
+
+        return $this->respond($result);
+    }
+
     public function getUsers()
     {
         $role  = $this->request->getVar('role');
