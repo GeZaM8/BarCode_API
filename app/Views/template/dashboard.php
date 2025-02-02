@@ -70,7 +70,7 @@ if ($user_role == 3) {
   </div>
 
   <footer class="container py-4 opacity-75 mt-auto">
-    <h5>&copy; 2025 barjek. All rights reserved.</h5>
+    <h5>&copy; <?= date('Y') ?> barjek. All rights reserved.</h5>
     <h6>Made by Serge and Team</h6>
   </footer>
 </div>
