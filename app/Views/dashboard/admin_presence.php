@@ -6,6 +6,10 @@
   .table tr td {
     white-space: nowrap;
   }
+
+  .table tr {
+    cursor: pointer;
+  }
 </style>
 <?= $this->endSection(); ?>
 
@@ -64,14 +68,21 @@
   </div>
 </div>
 
-<div class="row row-cols-1 row-cols-md-4">
-  <h5 class="mb-1"><span class="badge text-bg-success">Hadir: <span id="hadir">-</span></span></h5>
-  <h5 class="mb-1"><span class="badge text-bg-warning">Terlambat: <span id="terlambat">-</span></span></h5>
-  <h5 class="mb-1"><span class="badge text-bg-danger">Tidak Hadir: <span id="tidak-hadir">-</span></span></h5>
+<div class="d-flex justify-content-between">
+  <div class="d-flex gap-3">
+    <h6 class="mb-1"><span class="badge text-bg-success">Hadir: <span id="hadir">0</span></span></h6>
+    <h6 class="mb-1"><span class="badge text-bg-warning">Terlambat: <span id="terlambat">0</span></span></h6>
+    <h6 class="mb-1"><span class="badge text-bg-danger">Tidak Hadir: <span id="tidak-hadir">0</span></span></h6>
+  </div>
+  <div class="d-flex gap-3">
+    <h6>Mood Baik: <span id="baik">0</span></h6>
+    <h6>Mood Netral: <span id="netral">0</span></h6>
+    <h6>Mood Sedih: <span id="sedih">0</span></h6>
+  </div>
 </div>
 
 <div class="table-responsive mt-3">
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -92,10 +103,53 @@
   </table>
 </div>
 
+<div class="modal fade" id="reason-modal" tabindex="-1" aria-labelledby="Reason Mood Modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detil Kehadiran</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
+<script>
+  function showReasonModal(id) {
+    $.ajax({
+      url: '<?= admin_url('api/get-presence/') ?>' + id,
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        let modal = $('#reason-modal');
+        let body = modal.find('.modal-body');
+        let title = modal.find('.modal-title');
+        body.html(`
+          <div class="mb-3">
+            <label for="mood" class="form-label">Mood</label>
+            <input type="text" class="form-control" id="mood" name="mood" value="${data.mood ?? "-"}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="reason" class="form-label">Reason</label>
+            <textarea class="form-control" id="reason" name="reason" disabled rows="4">${data.reason ?? "-"}</textarea>
+          </div>
+        `);
+        title.text('Detil Kehadiran' + ' - ' + data.nama);
+        modal.modal('show');
+      }
+    })
+
+  }
+</script>
 <script>
   $(document).ready(function() {
     const urlbase = new URL(window.location.href);
@@ -142,6 +196,7 @@
 
               return {
                 ...user,
+                ...presenceCheck,
                 tanggal: presenceCheck ? presenceCheck.tanggal : $('#year').val() + '-' + (0 + $('#month').val()).slice(-2) + '-' + (0 + $('#day').val()).slice(-2),
                 status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
               }
@@ -151,6 +206,10 @@
           $('#hadir').text(presence.filter(presence => presence.status == 'Hadir').length);
           $('#terlambat').text(presence.filter(presence => presence.status == 'Terlambat').length);
           $('#tidak-hadir').text(presence.filter(presence => presence.status == 'Tidak Hadir').length);
+
+          $('#baik').text(presence.filter(presence => presence.mood == 'Baik').length);
+          $('#netral').text(presence.filter(presence => presence.mood == 'Netral').length);
+          $('#sedih').text(presence.filter(presence => presence.mood == 'Sedih').length);
 
           renderTable();
         }
@@ -167,7 +226,7 @@
       let html = '';
       copyPresence.forEach((item, index) => {
         html += `
-            <tr>
+            <tr onclick="showReasonModal(${item.id_absensi})">
               <th scope="row">${index + 1}</th>
               <td>
                 ${item.foto ? 

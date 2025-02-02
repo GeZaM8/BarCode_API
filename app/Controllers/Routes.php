@@ -62,6 +62,7 @@ $routes->group("web", static function (RouteCollection $routes) {
 
         $routes->group("api", static function (RouteCollection $routes) {
             $routes->get("get-presence", [AdminBackendController::class, "getPresence"]);
+            $routes->get("get-presence/(:num)", [AdminBackendController::class, "getPresenceDetail/$1"]);
             $routes->get("get-users", [AdminBackendController::class, "getUsers"]);
             $routes->get("get-kelas/(:num)", [AdminBackendController::class, "getKelas/$1"]);
             $routes->get("get-kelas", [AdminBackendController::class, "getKelas"]);
