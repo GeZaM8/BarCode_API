@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="utf-8">
@@ -9,7 +9,7 @@
   <?= $this->renderSection('styles') ?>
 </head>
 
-<body>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
   <?= $this->renderSection('body') ?>
 
   <!-- Scripts -->
