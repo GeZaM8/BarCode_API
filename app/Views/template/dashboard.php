@@ -108,7 +108,6 @@ if ($user_role == 3) {
 <script src="<?= base_url("/assets/jquery/jquery.toast.min.js") ?>"></script>
 <script src="<?= base_url("/scripts/toast-helper.js") ?>"></script>
 <script>
-    // Mobile menu toggle
     const mobileMenuButton = document.querySelector('[aria-controls="mobile-menu"]');
     const mobileMenu = document.getElementById('mobile-menu');
 
