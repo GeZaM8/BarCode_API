@@ -2,6 +2,7 @@
 
 <?= $this->section('styles'); ?>
 
+
 <style>
   .card-title {
     font-size: 2.5rem;
@@ -48,104 +49,132 @@
 
 <?= $this->section('content'); ?>
 
-<div class="text-end mb-4">
-    <p class="text-sm text-gray-600 dark:text-gray-400">Welcome, <?= session()->get("auth_login")['email'] ?></p>
-</div>
-
-<h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Kehadiran</h3>
-
-<div class="flex flex-col md:flex-row gap-6">
-    <div class="w-full md:w-2/5 space-y-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-gray-700 dark:text-gray-300">Hadir Tepat Waktu</h3>
+<!-- Header Section dengan animasi -->
+<div class="mb-8" data-aos="fade-down">
+    <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Dashboard Overview</h1>
+        <div class="flex items-center space-x-4">
+            <div class="flex items-center bg-white dark:bg-gray-800 p-2 rounded-lg shadow">
+                <i class="bi bi-person-circle text-xl mr-2 text-gray-600 dark:text-gray-300"></i>
+                <span class="text-sm text-gray-600 dark:text-gray-300"><?= session()->get("auth_login")['email'] ?></span>
             </div>
-            <div class="px-4 py-4 relative">
-                <h1 id="hadir" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
-                <i class="bi bi-clipboard2-check absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
-            </div>
-            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Hadir") ?>" 
-               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm">More Info</span>
-                    <i class="bi bi-chevron-right"></i>
-                </div>
-            </a>
-        </div>
-  
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-gray-700 dark:text-gray-300">Terlambat</h3>
-            </div>
-            <div class="px-4 py-4 relative">
-                <h1 id="terlambat" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
-                <i class="bi bi-clipboard2-minus absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
-            </div>
-            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Terlambat") ?>" 
-               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm">More Info</span>
-                    <i class="bi bi-chevron-right"></i>
-                </div>
-            </a>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-gray-700 dark:text-gray-300">Tidak Hadir</h3>
-            </div>
-            <div class="px-4 py-4 relative">
-                <h1 id="tidak-hadir" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
-                <i class="bi bi-clipboard2-x absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
-            </div>
-            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Tidak Hadir") ?>" 
-               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm">More Info</span>
-                    <i class="bi bi-chevron-right"></i>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <div class="w-full md:w-3/5">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[500px] md:h-full">
-            <canvas id="chartContainer" class="w-full h-full"></canvas>
         </div>
     </div>
 </div>
 
-<h3 class="text-2xl font-semibold my-6 text-gray-800 dark:text-gray-200">Data</h3>
+<!-- Kehadiran Section -->
+<div class="mb-8" data-aos="fade-up">
+    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">Statistik Kehadiran</h3>
+    
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Card Kehadiran dengan efek hover dan transisi -->
+        <div class="w-full md:w-2/5 space-y-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden" 
+                 data-aos="zoom-in" data-aos-delay="100">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Hadir Tepat Waktu</h3>
+                </div>
+                <div class="px-6 py-6 relative">
+                    <h1 id="hadir" class="text-5xl font-bold text-emerald-600 dark:text-emerald-400">Loading...</h1>
+                    <i class="bi bi-clipboard2-check absolute top-2 right-4 text-7xl opacity-20 text-emerald-500"></i>
+                </div>
+                <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Hadir") ?>" 
+                   class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">More Info</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-gray-700 dark:text-gray-300">Users</h3>
+            <!-- Card Terlambat -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                 data-aos="zoom-in" data-aos-delay="200">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Terlambat</h3>
+                </div>
+                <div class="px-6 py-6 relative">
+                    <h1 id="terlambat" class="text-5xl font-bold text-yellow-600 dark:text-yellow-400">Loading...</h1>
+                    <i class="bi bi-clipboard2-minus absolute top-2 right-4 text-7xl opacity-20 text-yellow-500"></i>
+                </div>
+                <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Terlambat") ?>" 
+                   class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">More Info</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card Tidak Hadir -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                 data-aos="zoom-in" data-aos-delay="300">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Tidak Hadir</h3>
+                </div>
+                <div class="px-6 py-6 relative">
+                    <h1 id="tidak-hadir" class="text-5xl font-bold text-red-600 dark:text-red-400">Loading...</h1>
+                    <i class="bi bi-clipboard2-x absolute top-2 right-4 text-7xl opacity-20 text-red-500"></i>
+                </div>
+                <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Tidak Hadir") ?>" 
+                   class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">More Info</span>
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
         </div>
-        <div class="px-4 py-4 relative">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $users_count ?></h1>
-            <i class="bi bi-people-fill absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+
+        <!-- Chart Section -->
+        <div class="w-full md:w-3/5" data-aos="fade-left">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 h-[500px] md:h-full">
+                <canvas id="chartContainer" class="w-full h-full"></canvas>
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-gray-700 dark:text-gray-300">Kelas</h3>
+<!-- Data Statistics Section -->
+<div class="mb-8" data-aos="fade-up">
+    <h3 class="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">Statistik Data</h3>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden p-6"
+             data-aos="zoom-in" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Users</p>
+                    <h3 class="text-3xl font-bold text-gray-800 dark:text-white mt-2"><?= $users_count ?></h3>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                    <i class="bi bi-people-fill text-3xl text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
         </div>
-        <div class="px-4 py-4 relative">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $kelas_count ?></h1>
-            <i class="bi bi-building absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden p-6"
+             data-aos="zoom-in" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Kelas</p>
+                    <h3 class="text-3xl font-bold text-gray-800 dark:text-white mt-2"><?= $kelas_count ?></h3>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                    <i class="bi bi-people-fill text-3xl text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <!-- Jurusan Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-gray-700 dark:text-gray-300">Jurusan</h3>
-        </div>
-        <div class="px-4 py-4 relative">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $jurusan_count ?></h1>
-            <i class="bi bi-stars absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden p-6"
+             data-aos="zoom-in" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Jurusan</p>
+                    <h3 class="text-3xl font-bold text-gray-800 dark:text-white mt-2"><?= $jurusan_count ?></h3>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                    <i class="bi bi-people-fill text-3xl text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -154,8 +183,16 @@
 
 <?= $this->section('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 <script>
-  $(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+    
     $.ajax({
       url: '<?= admin_url('api/get-presence') ?>',
       method: 'GET',
@@ -195,7 +232,7 @@
         const chartData = [{
             status: "Tepat Waktu",
             count: hadir
-          },
+          },  
           {
             status: "Terlambat",
             count: terlambat
@@ -251,6 +288,6 @@
           });
       }
     });
-  });
+});
 </script>
 <?= $this->endSection(); ?>

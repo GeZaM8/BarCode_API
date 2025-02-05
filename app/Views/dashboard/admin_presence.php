@@ -1,18 +1,5 @@
 <?= $this->extend('template/dashboard'); ?>
 
-<?= $this->section('styles'); ?>
-<style>
-  .table tr th,
-  .table tr td {
-    white-space: nowrap;
-  }
-
-  .table tr {
-    cursor: pointer;
-  }
-</style>
-<?= $this->endSection(); ?>
-
 <?= $this->section('content'); ?>
 
 <div class="flex justify-between items-center mb-4">

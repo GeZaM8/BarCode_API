@@ -43,10 +43,10 @@
 </div>
 
 <div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead id="head-table" class="bg-gray-50 dark:bg-gray-700">
+    <table class="min-w-full table-auto whitespace-nowrap">
+        <thead class="bg-gray-50 dark:bg-gray-700" id="head-table">
         </thead>
-        <tbody id="data-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="data-table">
         </tbody>
     </table>
 </div>
@@ -296,115 +296,131 @@
         switch (type) {
           case '1':
             head.append(`
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Kelas</th>
-                    <th scope="col">Jurusan</th>
-                    <th scope="col">No. Absen</th>
-                    <th scope="col">NIS</th>
-                    <th scope="col">NISN</th>
-                    <th scope="col">Aksi</th>
-                  </tr>
-                `);
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-10">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Kelas</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">Jurusan</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-28">No. Absen</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-28">NIS</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-28">NISN</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Aksi</th>
+              </tr>
+            `);
             users.forEach((item, index) => {
               table.append(`
-                  <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td>${item.id_user}</td>
-                    <td>${item.nama ?? "-"}</td>
-                    <td>${item.email ?? "-"}</td>
-                    <td>${item.kelas ?? "-"}</td>
-                    <td>${item.kode_jurusan ?? "-"}</td>
-                    <td>${item.no_absen ?? "-"}</td>
-                    <td>${item.nis ?? "-"}</td>
-                    <td>${item.nisn ?? "-"}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
-                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
-                    </td>
-                  </tr>
-                `);
-            })
+                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${index + 1}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.id_user}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nama ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.email ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.kelas ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.kode_jurusan ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.no_absen ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nis ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nisn ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm font-medium space-x-2">
+                    <button type="button" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" onclick="openPasswordModal('${item.id_user}')">
+                      <i class="bi bi-unlock-fill"></i>
+                    </button>
+                    <button type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="deleteUser('${item.id_user}')">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
             break
           case '2':
             head.append(`
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">NIP</th>
-                    <th scope="col">Aksi</th>
-                  </tr>
-                `);
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-10">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">NIP</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Aksi</th>
+              </tr>
+            `);
             users.forEach((item, index) => {
               table.append(`
-                  <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td>${item.id_user}</td>
-                    <td>${item.nama ?? "-"}</td>
-                    <td>${item.email}</td>
-                    <td>${item.nip ?? "-"}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
-                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
-                    </td>
-                  </tr>
-                `);
-            })
+                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${index + 1}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.id_user}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nama ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.email}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nip ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm font-medium space-x-2">
+                    <button type="button" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" onclick="openPasswordModal('${item.id_user}')">
+                      <i class="bi bi-unlock-fill"></i>
+                    </button>
+                    <button type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="deleteUser('${item.id_user}')">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
             break
           case '3':
             head.append(`
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Aksi</th>
-                  </tr>
-                `);
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-10">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Aksi</th>
+              </tr>
+            `);
             users.forEach((item, index) => {
               table.append(`
-                  <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td>${item.id_user}</td>
-                    <td>${item.email}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
-                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
-                    </td>
-                  </tr>
-                `);
-            })
+                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${index + 1}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.id_user}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.email}</td>
+                  <td class="px-6 py-4 text-sm font-medium space-x-2">
+                    <button type="button" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" onclick="openPasswordModal('${item.id_user}')">
+                      <i class="bi bi-unlock-fill"></i>
+                    </button>
+                    <button type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="deleteUser('${item.id_user}')">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
             break
           default:
             head.append(`
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Aksi</th>
-                  </tr>
-                `);
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-10">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-20">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-32">Role</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-24">Aksi</th>
+              </tr>
+            `);
             users.forEach((item, index) => {
               table.append(`
-                  <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td>${item.id_user}</td>
-                    <td>${item.nama ?? "-"}</td>
-                    <td>${item.email ?? "-"}</td>
-                    <td>${item.name_role}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-warning edit-btn" onclick="openPasswordModal('${item.id_user}')"><i class="bi bi-unlock-fill"></i></button>
-                      <button type="button" class="btn btn-sm btn-danger delete-btn" onclick="deleteUser('${item.id_user}')"><i class="bi bi-trash-fill"></i></button>
-                    </td>
-                  </tr>
-                `);
-            })
+                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${index + 1}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.id_user}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.nama ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.email ?? "-"}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">${item.name_role}</td>
+                  <td class="px-6 py-4 text-sm font-medium space-x-2">
+                    <button type="button" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" onclick="openPasswordModal('${item.id_user}')">
+                      <i class="bi bi-unlock-fill"></i>
+                    </button>
+                    <button type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="deleteUser('${item.id_user}')">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
             break
         }
       }
