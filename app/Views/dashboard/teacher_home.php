@@ -48,109 +48,111 @@
 
 <?= $this->section('content'); ?>
 
-<h6 class="mt-1 mb-2 text-end">Welcome, <?= session()->get("auth_login")['email'] ?></h6>
-
-<h3 class="mb-1">Kehadiran</h3>
-<div class="d-flex flex-column flex-md-row align-items-stretch gap-3">
-  <div style="flex: 2;" class="order-2 order-md-1">
-    <div class="card mb-3">
-      <div class="card-header">
-        Hadir Tepat Waktu
-      </div>
-      <div class="card-body">
-        <h1 class="card-title" id="hadir">Loading...</h1>
-        <i class="bi bi-clipboard2-check icon-bg"></i>
-      </div>
-      <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Hadir") ?>">
-        <div class="card-footer text-body-secondary d-flex justify-content-between align-items-center">
-          <small>More Info</small>
-          <i class="bi bi-chevron-right"></i>
-        </div>
-      </a>
-    </div>
-
-    <div class="card mb-3">
-      <div class="card-header">
-        Terlambat
-      </div>
-      <div class="card-body">
-        <h1 class="card-title" id="terlambat">Loading...</h1>
-        <i class="bi bi-clipboard2-minus icon-bg"></i>
-      </div>
-      <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Terlambat") ?>">
-        <div class="card-footer text-body-secondary d-flex justify-content-between align-items-center">
-          <small>More Info</small>
-          <i class="bi bi-chevron-right"></i>
-        </div>
-      </a>
-    </div>
-
-    <div class="card mb-3">
-      <div class="card-header">
-        Tidak Hadir
-      </div>
-      <div class="card-body">
-        <h1 class="card-title" id="tidak-hadir">Loading...</h1>
-        <i class="bi bi-clipboard2-x icon-bg"></i>
-      </div>
-      <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Tidak Hadir") ?>">
-        <div class="card-footer text-body-secondary d-flex justify-content-between align-items-center">
-          <small>More Info</small>
-          <i class="bi bi-chevron-right"></i>
-        </div>
-      </a>
-    </div>
-  </div>
-  <div style="flex: 3;" class="order-1 order-md-2">
-    <div class="chartWrapper">
-      <canvas id="chartContainer" style="width: 100%;"></canvas>
-    </div>
-  </div>
+<div class="text-end mb-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400">Welcome, <?= session()->get("auth_login")['email'] ?></p>
 </div>
 
+<h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Kehadiran</h3>
 
+<div class="flex flex-col md:flex-row gap-6">
+    <div class="w-full md:w-2/5 space-y-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-gray-700 dark:text-gray-300">Hadir Tepat Waktu</h3>
+            </div>
+            <div class="px-4 py-4 relative">
+                <h1 id="hadir" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
+                <i class="bi bi-clipboard2-check absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Hadir") ?>" 
+               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm">More Info</span>
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </a>
+        </div>
 
-<h3 class="mb-1">Data</h3>
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-1">
-  <div class="col mb-3">
-    <div class="card">
-      <div class="card-header">
-        Users
-      </div>
-      <div class="card-body">
-        <h1 class="card-title"><?= $users_count ?></h1>
-        <i class="bi bi-people-fill icon-bg"></i>
-      </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-gray-700 dark:text-gray-300">Terlambat</h3>
+            </div>
+            <div class="px-4 py-4 relative">
+                <h1 id="terlambat" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
+                <i class="bi bi-clipboard2-minus absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Terlambat") ?>" 
+               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm">More Info</span>
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-gray-700 dark:text-gray-300">Tidak Hadir</h3>
+            </div>
+            <div class="px-4 py-4 relative">
+                <h1 id="tidak-hadir" class="text-4xl font-bold text-gray-800 dark:text-gray-200">Loading...</h1>
+                <i class="bi bi-clipboard2-x absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <a href="<?= admin_url("presence?year=" . date('Y') . "&month=" . date('n') . "&day=" . date('j') . "&status=Tidak Hadir") ?>" 
+               class="block px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm">More Info</span>
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </a>
+        </div>
     </div>
-  </div>
-  <div class="col mb-3">
-    <div class="card">
-      <div class="card-header">
-        Kelas
-      </div>
-      <div class="card-body">
-        <h1 class="card-title"><?= $kelas_count ?></h1>
-        <i class="bi bi-building icon-bg"></i>
-      </div>
+
+    <div class="w-full md:w-3/5">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[500px] md:h-full">
+            <canvas id="chartContainer" class="w-full h-full"></canvas>
+        </div>
     </div>
-  </div>
-  <div class="col mb-3">
-    <div class="card">
-      <div class="card-header">
-        Jurusan
-      </div>
-      <div class="card-body">
-        <h1 class="card-title"><?= $jurusan_count ?></h1>
-        <i class="bi bi-stars icon-bg"></i>
-      </div>
+</div>
+
+<h3 class="text-2xl font-semibold my-6 text-gray-800 dark:text-gray-200">Data</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-gray-700 dark:text-gray-300">Users</h3>
+        </div>
+        <div class="px-4 py-4 relative">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $users_count ?></h1>
+            <i class="bi bi-people-fill absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+        </div>
     </div>
-  </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-gray-700 dark:text-gray-300">Kelas</h3>
+        </div>
+        <div class="px-4 py-4 relative">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $kelas_count ?></h1>
+            <i class="bi bi-building absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-gray-700 dark:text-gray-300">Jurusan</h3>
+        </div>
+        <div class="px-4 py-4 relative">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-200"><?= $jurusan_count ?></h1>
+            <i class="bi bi-stars absolute top-0 right-0 text-6xl opacity-30 text-gray-400 dark:text-gray-600"></i>
+        </div>
+    </div>
 </div>
 
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
   $(document).ready(function() {
     $.ajax({
@@ -174,7 +176,6 @@
         if (student.length > 0) {
           presence = student.map((user, index) => {
             const presenceCheck = presence.find(presence => presence.id_user == user.id_user);
-
             return {
               ...user,
               status: presenceCheck ? presenceCheck.status : 'Tidak Hadir'
@@ -206,27 +207,42 @@
 
         new Chart(
           document.getElementById("chartContainer"), {
-            type: 'pie',
+            type: 'bar',
             data: {
               labels: chartData.map(row => row.status),
               datasets: [{
-                label: 'Total',
+                label: 'Total Kehadiran',
                 data: chartData.map(row => row.count),
                 backgroundColor: [
-                  'rgb(10, 211, 74)',
-                  'rgb(255, 205, 86)',
-                  'rgb(248, 83, 119)',
-                ]
+                  'rgba(34, 197, 94, 0.8)',
+                  'rgba(234, 179, 8, 0.8)',
+                  'rgba(239, 68, 68, 0.8)',
+                ],
+                borderColor: [
+                  'rgb(34, 197, 94)',
+                  'rgb(234, 179, 8)',
+                  'rgb(239, 68, 68)',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                maxBarThickness: 50
               }]
             },
             options: {
-              plugins: {
-                legend: {
-                  labels: {
-                    font: {
-                      size: 14,
-                    },
-                    color: '#fff'
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: document.documentElement.classList.contains('dark') ? 
+                      'rgba(255, 255, 255, 0.1)' : 
+                      'rgba(0, 0, 0, 0.1)'
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
                   }
                 }
               }

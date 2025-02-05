@@ -15,110 +15,134 @@
 
 <?= $this->section('content'); ?>
 
-<div class="d-flex justify-content-between align-items-center mb-2 gap-5">
-  <div class="d-flex align-items-center gap-3">
-    <h1>Kehadiran Kelas</h1>
+<div class="flex justify-between items-center mb-4">
+    <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Kehadiran Kelas</h1>
+        <div>
+            <select id="class" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
+                <option selected value="">Pilih Kelas</option>
+                <?php foreach ($class as $c): ?>
+                    <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="text-primary-600 dark:text-primary-400 hidden" id="loading" role="status">
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="flex gap-2">
+        <button id="filter" class="px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-sm font-medium transition-colors">
+            Reset Filter
+        </button>
+        <button id="refresh" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-sm font-medium transition-colors">
+            Refresh
+        </button>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
     <div>
-      <select class="form-select" aria-label="Select Class" id="class">
-        <option selected value="">Pilih Kelas</option>
-        <?php foreach ($class as $c): ?>
-          <option value="<?= $c->kelas ?>"><?= $c->kelas ?></option>
-        <?php endforeach; ?>
-      </select>
+        <label for="year" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tahun</label>
+        <select id="year" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
+            <option selected disabled>Pilih Tahun</option>
+            <?php for ($i = $end_year; $i >= $start_year; $i--): ?>
+                <option value="<?= $i ?>"><?= $i ?></option>
+            <?php endfor; ?>
+        </select>
     </div>
-    <div class="spinner-border text-primary" role="status" id="loading">
-      <span class="visually-hidden">Loading...</span>
+    <div>
+        <label for="month" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
+        <select id="month" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
+            <option selected disabled>Pilih tahun terlebih dahulu</option>
+        </select>
     </div>
-  </div>
-  <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
-    <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
-  </div>
-</div>
-<div class="row mb-2">
-  <div class="col-md-3 mb-3">
-    <label for="year" class="form-label">Tahun</label>
-    <select class="form-select" aria-label="Select Year" id="year">
-      <option selected disabled>Pilih Tahun</option>
-      <?php for ($i = $end_year; $i >= $start_year; $i--): ?>
-        <option value="<?= $i ?>"><?= $i ?></option>
-      <?php endfor; ?>
-    </select>
-  </div>
-  <div class="col-md-3 mb-3">
-    <label for="month" class="form-label">Bulan</label>
-    <select class="form-select" aria-label="Select Month" id="month">
-      <option selected disabled>Pilih tahun terlebih dahulu</option>
-    </select>
-  </div>
-  <div class="col-md-3 mb-3">
-    <label for="day" class="form-label">Day</label>
-    <select class="form-select" aria-label="Select Day" id="day">
-      <option selected disabled>Pilih bulan terlebih dahulu</option>
-    </select>
-  </div>
-  <div class="col-md-3 mb-3">
-    <label for="Status" class="form-label">Status</label>
-    <select class="form-select" aria-label="Select Status" id="status">
-      <option selected value="">Pilih Status</option>
-      <option value="Hadir">Hadir</option>
-      <option value="Terlambat">Terlambat</option>
-      <option value="Tidak Hadir">Tidak Hadir</option>
-    </select>
-  </div>
-</div>
-
-<div class="d-flex justify-content-between">
-  <div class="d-flex gap-3">
-    <h6 class="mb-1"><span class="badge text-bg-success">Hadir: <span id="hadir">0</span></span></h6>
-    <h6 class="mb-1"><span class="badge text-bg-warning">Terlambat: <span id="terlambat">0</span></span></h6>
-    <h6 class="mb-1"><span class="badge text-bg-danger">Tidak Hadir: <span id="tidak-hadir">0</span></span></h6>
-  </div>
-  <div class="d-flex gap-3">
-    <h6>Mood Baik: <span id="baik">0</span></h6>
-    <h6>Mood Netral: <span id="netral">0</span></h6>
-    <h6>Mood Sedih: <span id="sedih">0</span></h6>
-  </div>
-</div>
-
-<div class="table-responsive mt-3">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Foto</th>
-        <th scope="col">Nama</th>
-        <th scope="col">Email</th>
-        <th scope="col">Kelas</th>
-        <th scope="col">Jurusan</th>
-        <th scope="col">No. Absen</th>
-        <th scope="col">Timestamp</th>
-        <th scope="col">Mood</th>
-        <th scope="col">Status</th>
-        <th scope="col">Tanggal</th>
-      </tr>
-    </thead>
-    <tbody id="data-table">
-    </tbody>
-  </table>
-</div>
-
-<div class="modal fade" id="reason-modal" tabindex="-1" aria-labelledby="Reason Mood Modal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Detil Kehadiran</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
+    <div>
+        <label for="day" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hari</label>
+        <select id="day" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
+            <option selected disabled>Pilih bulan terlebih dahulu</option>
+        </select>
     </div>
-  </div>
+    <div>
+        <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+        <select id="status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm">
+            <option selected value="">Pilih Status</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Terlambat">Terlambat</option>
+            <option value="Tidak Hadir">Tidak Hadir</option>
+        </select>
+    </div>
 </div>
 
+<div class="flex justify-between mb-4">
+    <div class="flex gap-3">
+        <span class="inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-sm font-medium text-green-700 dark:bg-green-800/30 dark:text-green-500">
+            Hadir: <span id="hadir" class="ml-1">0</span>
+        </span>
+        <span class="inline-flex items-center rounded-md bg-yellow-100 px-2 py-1 text-sm font-medium text-yellow-700 dark:bg-yellow-800/30 dark:text-yellow-500">
+            Terlambat: <span id="terlambat" class="ml-1">0</span>
+        </span>
+        <span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700 dark:bg-red-800/30 dark:text-red-500">
+            Tidak Hadir: <span id="tidak-hadir" class="ml-1">0</span>
+        </span>
+    </div>
+    <div class="flex gap-3 text-sm text-gray-600 dark:text-gray-400">
+        <span>Mood Baik: <span id="baik" class="font-medium">0</span></span>
+        <span>Mood Netral: <span id="netral" class="font-medium">0</span></span>
+        <span>Mood Sedih: <span id="sedih" class="font-medium">0</span></span>
+    </div>
+</div>
+
+<div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Foto</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kelas</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jurusan</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No. Absen</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Timestamp</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Mood</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tanggal</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700" id="data-table">
+        </tbody>
+    </table>
+</div>
+
+<div id="reason-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+        <div class="inline-block transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle">
+            <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100" id="modal-title">Detil Kehadiran</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body space-y-4">
+                </div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <button type="button" onclick="closeModal()" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?= $this->endSection(); ?>
 
@@ -132,24 +156,28 @@
       success: function(data) {
         let modal = $('#reason-modal');
         let body = modal.find('.modal-body');
-        let title = modal.find('.modal-title');
+        let title = modal.find('#modal-title');
         body.html(`
-          <div class="mb-3">
-            <label for="mood" class="form-label">Mood</label>
-            <input type="text" class="form-control" id="mood" name="mood" value="${data.mood ?? "-"}" disabled>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mood</label>
+            <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm" value="${data.mood ?? "-"}" disabled>
           </div>
-          <div class="mb-3">
-            <label for="reason" class="form-label">Reason</label>
-            <textarea class="form-control" id="reason" name="reason" disabled rows="4">${data.reason ?? "-"}</textarea>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reason</label>
+            <textarea class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:text-sm" disabled rows="4">${data.reason ?? "-"}</textarea>
           </div>
         `);
         title.text('Detil Kehadiran' + ' - ' + data.nama);
-        modal.modal('show');
+        modal.removeClass('hidden');
       }
     })
+  }
 
+  function closeModal() {
+    $('#reason-modal').addClass('hidden');
   }
 </script>
+
 <script>
   $(document).ready(function() {
     const urlbase = new URL(window.location.href);

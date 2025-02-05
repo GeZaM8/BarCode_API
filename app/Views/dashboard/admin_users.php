@@ -2,113 +2,153 @@
 
 <?= $this->section('content'); ?>
 
-
-<div class="d-flex justify-content-between align-items-center mb-2 gap-5">
-  <div class="d-flex align-items-center gap-3">
-    <h1>Users</h1>
-    <div class="spinner-border text-primary" role="status" id="loading">
-      <span class="visually-hidden">Loading...</span>
+<div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-5">
+    <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Users</h1>
+        <div id="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
     </div>
-  </div>
-  <div class="d-flex gap-2 ">
-    <button class="btn btn-sm btn-success" id="add" onclick="openData()">Tambah</button>
-    <button class="btn btn-sm btn-secondary" id="filter">Reset Filter</button>
-    <button class="btn btn-sm btn-primary" id="refresh">Refresh</button>
-  </div>
-</div>
-<div class="row mb-2">
-  <div class="col-md-3 mb-3">
-    <label for="role_filter" class="form-label">Role</label>
-    <select class="form-select" aria-label="Select Role" id="role_filter">
-      <option selected disabled>Select Role</option>
-      <option value="">All</option>
-      <?php foreach ($roles as $r): ?>
-        <option value="<?= $r->id_role ?>"><?= $r->name_role ?></option>
-      <?php endforeach; ?>
-    </select>
-  </div>
-  <div class="col-md-3 mb-3">
-    <label for="class" class="form-label">Kelas</label>
-    <select class="form-select" aria-label="Select Class" id="class" disabled>
-      <option selected disabled value="">Pilih Role Siswa</option>
-      <?php foreach ($kelas as $c): ?>
-        <option value="<?= $c->id_kelas ?>"><?= $c->kelas ?></option>
-      <?php endforeach; ?>
-    </select>
-  </div>
+    <div class="flex gap-2">
+        <button id="add" onclick="openData()" class="px-4 py-2 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+            Tambah
+        </button>
+        <button id="filter" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+            Reset Filter
+        </button>
+        <button id="refresh" class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Refresh
+        </button>
+    </div>
 </div>
 
-<div class="table-responsive">
-  <table class="table">
-    <thead id="head-table">
-    </thead>
-    <tbody id="data-table">
-    </tbody>
-  </table>
-</div>
-
-<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="save-users" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="edit-form" onsubmit="formHandle(event)" action method="post">
-        <div class=" modal-header">
-          <h1 class="modal-title fs-5" id="modal-title">Tambah Users</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            Role:
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div>
+        <label for="role_filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+        <select id="role_filter" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option selected disabled>Select Role</option>
+            <option value="">All</option>
             <?php foreach ($roles as $r): ?>
-              <input type="radio" value="<?= $r->id_role ?>" class="btn-check" name="id_role" id="id-role-<?= $r->id_role ?>" autocomplete="off">
-              <label class="btn btn-sm btn-outline-primary" for="id-role-<?= $r->id_role ?>"><?= $r->name_role ?></label>
+                <option value="<?= $r->id_role ?>"><?= $r->name_role ?></option>
             <?php endforeach; ?>
-          </div>
-
-          <div class="mb-3">
-            <label for="nama" class="form-label">Nama</label>
-            <input type="text" class="form-control" id="nama" name="nama">
-          </div>
-          <div id="expand-data">
-
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
+        </select>
     </div>
-  </div>
+    <div>
+        <label for="class" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kelas</label>
+        <select id="class" disabled class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option selected disabled value="">Pilih Role Siswa</option>
+            <?php foreach ($kelas as $c): ?>
+                <option value="<?= $c->id_kelas ?>"><?= $c->kelas ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 </div>
 
-<div class="modal fade" id="password-modal" tabindex="-1" aria-labelledby="save-users" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="password-form" onsubmit="changePasswordUser(event)" action method="post">
-        <div class=" modal-header">
-          <h1 class="modal-title fs-5" id="modal-title">Ubah Password</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead id="head-table" class="bg-gray-50 dark:bg-gray-700">
+        </thead>
+        <tbody id="data-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        </tbody>
+    </table>
+</div>
+
+<!-- Edit Modal -->
+<div id="edit-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+        
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full">
+            <form id="edit-form" onsubmit="formHandle(event)">
+                <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                    <h3 id="modal-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100">Tambah Users</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500" data-dismiss="modal">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-4">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role:</label>
+                        <div class="flex flex-wrap gap-2">
+                            <?php foreach ($roles as $r): ?>
+                                <div class="flex items-center">
+                                    <input type="radio" id="id-role-<?= $r->id_role ?>" name="id_role" value="<?= $r->id_role ?>" 
+                                           class="hidden peer" required>
+                                    <label for="id-role-<?= $r->id_role ?>" 
+                                           class="px-3 py-2 text-sm border border-blue-500 text-blue-500 rounded-lg peer-checked:bg-blue-500 peer-checked:text-white cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors">
+                                        <?= $r->name_role ?>
+                                    </label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama</label>
+                        <input type="text" id="nama" name="nama" 
+                               class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div id="expand-data">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-2 p-4 border-t dark:border-gray-700">
+                    <button type="button" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        Simpan
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <input type="hidden" class="form-control" id="id_user" name="id_user">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
     </div>
-  </div>
+</div>
+
+<div id="password-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+        
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg max-w-md w-full">
+            <form id="password-form" onsubmit="changePasswordUser(event)">
+                <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Ubah Password</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500" data-dismiss="modal">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-4">
+                    <input type="hidden" id="id_user" name="id_user">
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                        <input type="password" id="password" name="password" 
+                               class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-2 p-4 border-t dark:border-gray-700">
+                    <button type="button" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <?= $this->endSection(); ?>
 
 <?= $this->section('scripts'); ?>
-
 <script>
   let baseUrl = "<?= admin_url() ?>";
   let table = $('#data-table');
