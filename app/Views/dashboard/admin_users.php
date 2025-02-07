@@ -167,7 +167,8 @@
   let expandForm = $('#expand-data');
 
   function openData(id = null) {
-    editModal.modal('show');
+    // editModal.modal('show');
+    editModal.removeClass('hidden');
     editModal.find('#modal-title').text('Tambah Users');
     editForm.trigger('reset');
     expandForm.html('');
