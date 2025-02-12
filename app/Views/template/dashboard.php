@@ -2,9 +2,9 @@
 
 <?= $this->section('styles'); ?>
 <link rel="stylesheet" href="<?= base_url("assets/jquery/jquery.toast.min.css") ?>">
-<!-- Tambahkan Font Awesome CDN yang benar -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<!-- Tambahan CSS untuk dashboard -->
+
 <style>
     .nav-link-hover {
         @apply relative overflow-hidden;
@@ -36,30 +36,25 @@ if ($user_role == 3) {
 ?>
 
 <div class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Navbar dengan desain baru -->
+    
     <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <!-- Logo dan Brand -->
+                
                 <div class="flex items-center">
                     <a href="<?= $url_base() ?>" class="flex-shrink-0 flex items-center space-x-3" data-aos="fade-right">
                         <img class="h-10 w-auto" src="<?= base_url("assets/img/logo-long.png") ?>" alt="BarCode Logo">
                     </a>
                 </div>
 
-                <!-- Desktop Menu -->
+                
                 <div class="hidden sm:flex sm:items-center sm:space-x-4">
                     <a href="<?= $url_base() ?>" 
                        class="nav-link-hover <?= $current_page == 'home' ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300' ?> px-3 py-2 text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
                         <i class="fas fa-home mr-2"></i>Home
                     </a>
-                    
-                    <a href="<?= base_url("qrcode") ?>" 
-                       class="nav-link-hover text-gray-700 dark:text-gray-300 px-3 py-2 text-sm font-medium hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
-                        <i class="fas fa-qrcode mr-2"></i>QRCode
-                    </a>
 
-                    <!-- Dropdown dengan animasi -->
+                    
                     <div class="relative group" data-tippy-content="Menu Data">
                         <button class="nav-link-hover <?= str_contains($current_page, 'data') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300' ?> px-3 py-2 text-sm font-medium group flex items-center space-x-1">
                             <i class="fas fa-database mr-2"></i>
@@ -102,7 +97,7 @@ if ($user_role == 3) {
                     </a>
                 </div>
 
-                <!-- Mobile menu button -->
+                
                 <div class="flex items-center sm:hidden">
                     <button type="button" 
                             class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition-colors duration-200" 
@@ -115,14 +110,13 @@ if ($user_role == 3) {
             </div>
         </div>
 
-        <!-- Mobile menu dengan animasi -->
+        
         <div class="sm:hidden hidden animate__animated animate__fadeIn" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <!-- Mobile menu items dengan icons -->
+                
                 <a href="<?= $url_base() ?>" class="<?= $current_page == 'home' ? 'bg-primary-500 text-white' : 'text-gray-700 dark:text-gray-300' ?> block px-3 py-2 rounded-md text-base font-medium hover:bg-primary-500 hover:text-white transition-colors duration-200">
                     <i class="fas fa-home mr-2"></i>Home
                 </a>
-                <a href="<?= base_url("qrcode") ?>" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-100">QRCode</a>
                 <a href="<?= $url_base("users") ?>" class="<?= $current_page == 'data.users' ? 'bg-gray-100 dark:bg-gray-700' : '' ?> block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-100">Users</a>
                 <a href="<?= $url_base("kelas") ?>" class="<?= $current_page == 'data.kelas' ? 'bg-gray-100 dark:bg-gray-700' : '' ?> block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-100">Kelas</a>
                 <a href="<?= $url_base('jurusan') ?>" class="<?= $current_page == 'data.jurusan' ? 'bg-gray-100 dark:bg-gray-700' : '' ?> block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-100">Jurusan</a>
@@ -132,14 +126,14 @@ if ($user_role == 3) {
         </div>
     </nav>
 
-    <!-- Main Content dengan animasi -->
+    
     <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="animate__animated animate__fadeIn animate__faster">
             <?= $this->renderSection('content'); ?>
         </div>
     </main>
 
-    <!-- Footer yang lebih menarik -->
+    
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
