@@ -55,7 +55,7 @@ if ($user_role == 3) {
                     </a>
 
                     
-                    <div class="relative group" data-tippy-content="Menu Data">
+                    <div class="relative group">
                         <button class="nav-link-hover <?= str_contains($current_page, 'data') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300' ?> px-3 py-2 text-sm font-medium group flex items-center space-x-1">
                             <i class="fas fa-database mr-2"></i>
                             <span>Data</span>
