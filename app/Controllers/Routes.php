@@ -46,7 +46,7 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
 // Web Route
 //============================================//
 
-$routes->get("qrcode", [QRCodeController::class, "index"], ['filter' => 'DashboardAccess:2,3']);
+$routes->get("qrcode", [QRCodeController::class, "index"]);
 
 $routes->group("web", static function (RouteCollection $routes) {
     $routes->get('/', [AuthController::class, "login_page"], ['filter' => 'UserAccess']);
