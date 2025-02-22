@@ -190,7 +190,6 @@
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No.</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kode Jurusan</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama Jurusan</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
           </tr>
         `);
         
@@ -201,14 +200,6 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">${index + 1}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">${item.kode_jurusan}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">${item.nama_jurusan}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <button onclick="openData('${item.kode_jurusan}')" class="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400 dark:hover:text-emerald-300">
-                  <i class="bi bi-pencil-fill"></i>
-                </button>
-                <button onclick="deleteJurusan('${item.kode_jurusan}')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                  <i class="bi bi-trash-fill"></i>
-                </button>
-              </td>
             </tr>
           `);
         });
