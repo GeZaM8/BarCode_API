@@ -388,7 +388,7 @@
     }, 200);
   }
 
-  // Open modal functions
+  // Open modal function
   function openData(id = null) {
     editModal.removeClass('hidden');
     editModal.addClass('animate__animated animate__fadeIn');
