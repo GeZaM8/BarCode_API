@@ -397,7 +397,7 @@
     editModal.removeClass('hidden');
     editModal.addClass('animate__animated animate__fadeIn');
 
-    // Reset dan enable jurusan select
+    // Reset dan enable jurusan selec
     const jurusanSelect = $('select[name="kode_jurusan"]');
     jurusanSelect.prop('disabled', false);
 
