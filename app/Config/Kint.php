@@ -2,64 +2,56 @@
 
 namespace Config;
 
-use Kint\Parser\ConstructablePluginInterface;
-use Kint\Renderer\AbstractRenderer;
-use Kint\Renderer\Rich\TabPluginInterface;
-use Kint\Renderer\Rich\ValuePluginInterface;
+use CodeIgniter\Config\BaseConfig;
+use Kint\Kint as KintDebugger;
 
-/**
- * --------------------------------------------------------------------------
- * Kint
- * --------------------------------------------------------------------------
- *
- * We use Kint's `RichRenderer` and `CLIRenderer`. This area contains options
- * that you can set to customize how Kint works for you.
- *
- * @see https://kint-php.github.io/kint/ for details on these settings.
- */
-class Kint
+class Kint extends BaseConfig
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Global Settings
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * --------------------------------------------------------------------------
+     * Kint
+     * --------------------------------------------------------------------------
+     *
+     * Konfigurasi untuk Kint debugger.
+     *
+     * @var array
+     */
+    public $plugins = [];
 
     /**
-     * @var list<class-string<ConstructablePluginInterface>|ConstructablePluginInterface>|null
+     * Tema yang digunakan.
+     * Pilihan: 'original.css', 'solarized.css', 'solarized-dark.css', 'aante-light.css'
+     *
+     * @var string
      */
-    public $plugins;
-
-    public int $maxDepth           = 6;
-    public bool $displayCalledFrom = true;
-    public bool $expanded          = false;
-
-    /*
-    |--------------------------------------------------------------------------
-    | RichRenderer Settings
-    |--------------------------------------------------------------------------
-    */
-    public string $richTheme = 'aante-light.css';
-    public bool $richFolder  = false;
-    public int $richSort     = AbstractRenderer::SORT_FULL;
+    public $theme = 'original.css';
 
     /**
-     * @var array<string, class-string<ValuePluginInterface>>|null
+     * Mengatur tampilan default Kint
+     * Pilihan: 'rich', 'plain', 'cli'
+     *
+     * @var string
      */
-    public $richObjectPlugins;
+    public $maxDepth = 6;
+    public $displayCalledFrom = true;
+    public $expanded = false;
 
     /**
-     * @var array<string, class-string<TabPluginInterface>>|null
+     * Konfigurasi renderer
      */
-    public $richTabPlugins;
+    public function __construct()
+    {
+        parent::__construct();
 
-    /*
-    |--------------------------------------------------------------------------
-    | CLI Settings
-    |--------------------------------------------------------------------------
-    */
-    public bool $cliColors      = true;
-    public bool $cliForceUTF8   = false;
-    public bool $cliDetectWidth = true;
-    public int $cliMinWidth     = 40;
+        if (class_exists(KintDebugger::class)) {
+            KintDebugger::$depth_limit = $this->maxDepth;
+            KintDebugger::$display_called_from = $this->displayCalledFrom;
+            KintDebugger::$expanded = $this->expanded;
+            
+            // Nonaktifkan Kint di production
+            if (ENVIRONMENT === 'production') {
+                KintDebugger::$enabled_mode = false;
+            }
+        }
+    }
 }
