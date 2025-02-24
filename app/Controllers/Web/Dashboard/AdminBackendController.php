@@ -260,9 +260,6 @@ class AdminBackendController extends BaseController
 
             try {
                 $kelasData = $this->kelasModel->where('kelas', $kelas)->first();
-                if (!$kelasData) {
-                    return $this->respond(['message' => "Kelas tidak ditemukan, " . $kelasData], 500);
-                }
                 $id_kelas = $kelasData->id_kelas;
 
                 $this->userModel->insert([

@@ -18,7 +18,7 @@
       <i class="fas fa-plus mr-2"></i>
       Tambah
     </button>
-    <button id="upload" onclick="openUploadModal()" 
+    <button id="upload" onclick="openUploadModal()"
       class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
       <i class="fas fa-file-excel mr-2"></i>
       Upload Excel
@@ -217,56 +217,56 @@
 
 
 <div id="upload-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
-    
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-lg transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-2xl transition-all animate__animated animate__fadeInUp animate__faster">
-            <form id="upload-form" onsubmit="uploadExcel(event)">
-                <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        <i class="fas fa-file-excel mr-2 text-primary-500"></i>
-                        Upload Data Excel
-                    </h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-lg p-1" data-dismiss="modal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+  <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
 
-                <div class="p-6 space-y-6">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role:</label>
-                        <div class="flex flex-wrap gap-3">
-                            <?php foreach ($roles as $r): ?>
-                                <div class="flex-shrink-0">
-                                    <input type="radio" id="upload-role-<?= $r->id_role ?>" name="id_role" value="<?= $r->id_role ?>" class="hidden peer" required>
-                                    <label for="upload-role-<?= $r->id_role ?>" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 text-primary-500 rounded-lg peer-checked:bg-primary-500 peer-checked:text-white cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200">
-                                        <i class="fas fa-user-tag mr-2"></i>
-                                        <?= $r->name_role ?>
-                                    </label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <input type="file" name="file" accept=".xls,.xlsx" required class="block w-full text-sm text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900/20 dark:file:text-primary-300">
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Format file: XLS, XLSX</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-700/50">
-                    <button type="button" class="inline-flex items-center px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200" data-dismiss="modal">
-                        <i class="fas fa-times mr-2"></i>
-                        Batal
-                    </button>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 rounded-lg text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
-                        <i class="fas fa-upload mr-2"></i>
-                        Upload
-                    </button>
-                </div>
-            </form>
+  <div class="flex min-h-screen items-center justify-center p-4">
+    <div class="relative w-full max-w-lg transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-2xl transition-all animate__animated animate__fadeInUp animate__faster">
+      <form id="upload-form" onsubmit="uploadExcel(event)">
+        <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <i class="fas fa-file-excel mr-2 text-primary-500"></i>
+            Upload Data Excel
+          </h3>
+          <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-lg p-1" data-dismiss="modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+
+        <div class="p-6 space-y-6">
+          <div class="space-y-3">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role:</label>
+            <div class="flex flex-wrap gap-3">
+              <?php foreach ($roles as $r): ?>
+                <div class="flex-shrink-0">
+                  <input type="radio" id="upload-role-<?= $r->id_role ?>" name="id_role" value="<?= $r->id_role ?>" class="hidden peer" required>
+                  <label for="upload-role-<?= $r->id_role ?>" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 text-primary-500 rounded-lg peer-checked:bg-primary-500 peer-checked:text-white cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200">
+                    <i class="fas fa-user-tag mr-2"></i>
+                    <?= $r->name_role ?>
+                  </label>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+
+          <div class="relative">
+            <input type="file" name="file" accept=".xls,.xlsx" required class="block w-full text-sm text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900/20 dark:file:text-primary-300">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Format file: XLS, XLSX</p>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-700/50">
+          <button type="button" class="inline-flex items-center px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200" data-dismiss="modal">
+            <i class="fas fa-times mr-2"></i>
+            Batal
+          </button>
+          <button type="submit" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 rounded-lg text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
+            <i class="fas fa-upload mr-2"></i>
+            Upload
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 
@@ -902,65 +902,65 @@
 
   function uploadExcel(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(e.target);
-    
+
     $.ajax({
-        url: '<?= admin_url('api/add-users-xls') ?>',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        beforeSend: function() {
-            $('.btn').attr('disabled', true);
-            loading.removeClass("hidden");
-        },
-        complete: function() {
-            loading.addClass("hidden");
-            $('.btn').attr('disabled', false);
-        },
-        success: function(response) {
-            if (response.errors && response.errors.length > 0) {
-                // Tampilkan warning jika ada error partial
-                let errorMsg = response.message + "\n\nDetail error:\n" + response.errors.join("\n");
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Perhatian',
-                    text: errorMsg,
-                });
-            } else {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: response.message,
-                });
-            }
-            closeModal($('#upload-modal'));
-            requestBackend();
-        },
-        error: function(xhr, status, error) {
-            let errorMsg = "Gagal mengupload file";
-            
-            try {
-                // Coba parse response JSON jika ada
-                const response = xhr.responseJSON || JSON.parse(xhr.responseText);
-                if (response && response.message) {
-                    errorMsg = response.message;
-                    if (response.errors) {
-                        errorMsg += "\n\nDetail error:\n" + response.errors.join("\n");
-                    }
-                }
-            } catch (e) {
-                // Jika gagal parse JSON, gunakan error message default
-                errorMsg = error || "Terjadi kesalahan pada server";
-            }
-            
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: errorMsg,
-            });
+      url: '<?= admin_url('api/add-users-xls') ?>',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      beforeSend: function() {
+        $('.btn').attr('disabled', true);
+        loading.removeClass("hidden");
+      },
+      complete: function() {
+        loading.addClass("hidden");
+        $('.btn').attr('disabled', false);
+      },
+      success: function(response) {
+        if (response.errors && response.errors.length > 0) {
+          // Tampilkan warning jika ada error partial
+          let errorMsg = response.message + "\n\nDetail error:\n" + response.errors.join("\n");
+          Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian',
+            text: errorMsg,
+          });
+        } else {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: response.message,
+          });
         }
+        closeModal($('#upload-modal'));
+        requestBackend();
+      },
+      error: function(xhr, status, error) {
+        let errorMsg = "Gagal mengupload file";
+
+        // try {
+        //   // Coba parse response JSON jika ada
+        //   const response = xhr.responseJSON || JSON.parse(xhr.responseText);
+        //   if (response && response.message) {
+        //     errorMsg = response.message;
+        //     if (response.errors) {
+        //       errorMsg += "\n\nDetail error:\n" + response.errors.join("\n");
+        //     }
+        //   }
+        // } catch (e) {
+        //   // Jika gagal parse JSON, gunakan error message default
+        //   errorMsg = error || "Terjadi kesalahan pada server";
+        // }
+
+        // Swal.fire({
+        //   icon: 'error',
+        //   title: 'Error',
+        //   text: errorMsg,
+        // });
+      }
     });
   }
 </script>
