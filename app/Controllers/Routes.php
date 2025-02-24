@@ -77,6 +77,8 @@ $routes->group("web", static function (RouteCollection $routes) {
             $routes->post("add-kelas", [AdminBackendController::class, "addKelas"]);
             $routes->post("add-jurusan", [AdminBackendController::class, "addJurusan"]);
 
+            $routes->post("add-users-xls", [AdminBackendController::class, "addUserExcel"]);
+
             $routes->delete("delete-users/(:num)", [AdminBackendController::class, "deleteUser/$1"]);
             $routes->delete("delete-kelas/(:num)", [AdminBackendController::class, "deleteKelas/$1"]);
             $routes->delete("delete-jurusan/(:segment)", [AdminBackendController::class, "deleteJurusan/$1"]);

@@ -12,7 +12,7 @@ class Kelas extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["kelas"];
+    protected $allowedFields    = ["kelas", "id_kelas"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

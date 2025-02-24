@@ -218,6 +218,75 @@ class AdminBackendController extends BaseController
         }
     }
 
+    public function addUserExcel()
+    {
+        $valid = $this->validate(
+            [
+                'file' => [
+                    'label' => 'File',
+                    'rules' => 'uploaded[file]|max_size[file,10240]|ext_in[file,xls,xlsx]',
+                ],
+            ]
+        );
+
+        if (!$valid) {
+            return $this->respond(['message' => "File tidak valid"], 500);
+        }
+
+        $data = (array) $this->request->getVar();
+        $file = $this->request->getFile('file');
+        $ext = $file->getClientExtension();
+        if ($ext == 'xls') {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        } else if ($ext == 'xlsx') {
+            $render = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        }
+
+        $spreadsheet = $render->load($file);
+        $data_excel = $spreadsheet->getActiveSheet()->toArray();
+
+        $id_user = null;
+        foreach ($data_excel as $x => $row) {
+            if ($x == 0) {
+                continue;
+            }
+
+            $nama = $row[0];
+            $kelas = $row[1];
+            $jurusan = $row[2];
+            $no_absen = $row[3];
+            $nis = $row[4];
+            $nisn = $row[5];
+
+            try {
+                $kelasData = $this->kelasModel->where('kelas', $kelas)->first();
+                if (!$kelasData) {
+                    return $this->respond(['message' => "Kelas tidak ditemukan, " . $kelasData], 500);
+                }
+                $id_kelas = $kelasData->id_kelas;
+
+                $this->userModel->insert([
+                    "id_role" => $data['id_role'],
+                ]);
+
+                $id_user = $this->userModel->getInsertID();
+
+                $this->userSiswaModel->insert([
+                    "id_user" => $id_user,
+                    "nama" => $nama,
+                    "id_kelas" => $id_kelas,
+                    "kode_jurusan" => $jurusan,
+                    "no_absen" => $no_absen,
+                    "nis" => $nis,
+                    "nisn" => $nisn
+                ]);
+            } catch (DatabaseException $e) {
+                $this->userModel->delete($id_user);
+                return $this->respond(['message' => $e->getMessage()], 500);
+            }
+        }
+    }
+
     public function addKelas()
     {
         $data = $this->request->getVar();
