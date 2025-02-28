@@ -273,8 +273,8 @@
               <h4 class="font-medium text-gray-900 dark:text-white mb-2">Format Excel:</h4>
               <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
                 <li>Nama</li>
-                <li>Kelas (contoh: X TKJ 1)</li>
-                <li>Jurusan (kode: RPL/TKJ/MM/dll)</li>
+                <li>Kelas (contoh: X RPL 1)</li>
+                <li>Jurusan (kode: RPL/TBG/TBS/dll)</li>
                 <li>No. Absen</li>
                 <li>NIS</li>
                 <li>NISN</li>
