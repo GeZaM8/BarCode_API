@@ -556,4 +556,144 @@ class AdminBackendController extends BaseController
         $writer->save('php://output');
         exit;
     }
+
+    public function downloadTemplate()
+    {
+        $role = $this->request->getVar('role');
+        
+        
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+
+        switch ($role) {
+            case '1': // Siswa
+                $headers = ['Nama', 'Kelas', 'Jurusan', 'No. Absen', 'NIS', 'NISN'];
+                $example = ['Satria Jati', '11 RPL 2', 'RPL', '28', '12345', '1234567890'];
+                $sheet->setTitle('Template Data Siswa');
+                
+                $kelas = $this->kelasModel->findAll();
+                $kelasList = array_column($kelas, 'kelas');
+                
+                $validation = $sheet->getCell('B2')->getDataValidation();
+                $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)
+                          ->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION)
+                          ->setAllowBlank(false)
+                          ->setShowInputMessage(true)
+                          ->setShowErrorMessage(true)
+                          ->setShowDropDown(true)
+                          ->setErrorTitle('Input error')
+                          ->setError('Nilai tidak ada dalam daftar.')
+                          ->setPromptTitle('Pilih Kelas')
+                          ->setPrompt('Pilih kelas dari daftar yang tersedia')
+                          ->setFormula1('"'.implode(',', $kelasList).'"');
+                break;
+                
+            case '2':
+                $headers = ['Nama', 'NIP', 'Email'];
+                $example = ['Rian', '198509102015051001', 'guru@example.com'];
+                $sheet->setTitle('Template Data Guru');
+                break;
+                
+            case '3': 
+                $headers = ['Nama', 'Email'];
+                $example = ['Hilal', 'admin@example.com'];
+                $sheet->setTitle('Template Data Admin');
+                break;
+                
+            default:
+                return $this->respond(['error' => 'Role tidak valid'], 400);
+        }
+
+        foreach (range(0, count($headers) - 1) as $i) {
+            $col = chr(65 + $i);
+            $sheet->setCellValue($col . '1', $headers[$i]);
+            
+            $sheet->getStyle($col . '1')->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                    'color' => ['rgb' => 'FFFFFF']
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '4F46E5']
+                ]
+            ]);
+                
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        foreach (range(0, count($example) - 1) as $i) {
+            $col = chr(65 + $i);
+            $sheet->setCellValue($col . '2', $example[$i]);
+            
+            $sheet->getStyle($col . '2')->applyFromArray([
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'F3F4F6']
+                ]
+            ]);
+        }
+
+        $lastCol = chr(65 + count($headers) - 1);
+        $sheet->mergeCells("A4:{$lastCol}4");
+        $sheet->setCellValue('A4', 'Catatan:');
+        $sheet->getStyle('A4')->getFont()->setBold(true);
+
+        $notes = [];
+        if ($role == '1') {
+            $notes = [
+                '- Kolom Nama wajib diisi',
+                '- Kolom Kelas wajib diisi sesuai pilihan yang tersedia',
+                '- Kolom Jurusan wajib diisi (RPL/TBG/TBS/dll)',
+                '- Kolom No. Absen wajib diisi dengan angka',
+                '- Kolom NIS dan NISN opsional',
+                '- Hapus baris contoh sebelum mengupload'
+            ];
+        } else if ($role == '2') {
+            $notes = [
+                '- Kolom Nama wajib diisi',
+                '- Kolom NIP wajib diisi dengan format yang benar',
+                '- Kolom Email wajib diisi dengan format email yang valid',
+                '- Hapus baris contoh sebelum mengupload'
+            ];
+        } else {
+            $notes = [
+                '- Kolom Nama wajib diisi',
+                '- Kolom Email wajib diisi dengan format email yang valid',
+                '- Hapus baris contoh sebelum mengupload'
+            ];
+        }
+
+        $row = 5;
+        foreach ($notes as $note) {
+            $sheet->mergeCells("A{$row}:{$lastCol}{$row}");
+            $sheet->setCellValue("A{$row}", $note);
+            $row++;
+        }
+
+        $tableRange = "A1:{$lastCol}2";
+        $sheet->getStyle($tableRange)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ]);
+
+        $roleNames = [
+            '1' => 'siswa',
+            '2' => 'guru',
+            '3' => 'admin'
+        ];
+        $filename = "template_{$roleNames[$role]}.xlsx";
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
 }

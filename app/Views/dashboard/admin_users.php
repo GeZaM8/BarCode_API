@@ -263,7 +263,7 @@
             </div>
             
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              <a href="#" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+              <a href="javascript:void(0)" onclick="downloadTemplate()" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
                 <i class="fas fa-download mr-1"></i>
                 Download Template Excel
               </a>
@@ -1211,7 +1211,6 @@
         a.click();
         window.URL.revokeObjectURL(url);
         
-        // Reset button state dan tutup modal
         exportBtn.prop('disabled', false);
         exportBtn.html('<i class="fas fa-file-export mr-2"></i>Export Excel');
         $('#export-modal').addClass('hidden');
@@ -1229,6 +1228,21 @@
         exportBtn.prop('disabled', false);
         exportBtn.html('<i class="fas fa-file-export mr-2"></i>Export Excel');
       });
+  }
+
+  function downloadTemplate() {
+    const role = $('input[name="id_role"]:checked').val();
+    if (!role) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Pilih Role',
+            text: 'Silakan pilih role terlebih dahulu untuk mendownload template yang sesuai',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    window.location.href = `<?= admin_url('api/download-template') ?>?role=${role}`;
   }
 </script>
 
