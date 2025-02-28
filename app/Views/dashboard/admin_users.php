@@ -12,7 +12,7 @@
   <div class="flex items-center gap-3">
     <div id="loading" class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500 hidden"></div>
   </div>
-  <div class="flex gap-2">
+  <div class="flex flex-wrap gap-2">
     <button id="add" onclick="openData()"
       class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
       <i class="fas fa-plus mr-2"></i>
@@ -22,6 +22,11 @@
       class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
       <i class="fas fa-file-excel mr-2"></i>
       Upload Excel
+    </button>
+    <button id="export" onclick="openExportModal()"
+      class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+      <i class="fas fa-file-export mr-2"></i>
+      Export Excel
     </button>
     <button id="filter"
       class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
@@ -57,7 +62,7 @@
     <label for="class" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Kelas</label>
     <div class="relative">
       <select id="class" disabled class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200">
-        <option selected disabled value="">Pilih Role Siswa</option>
+        <option selected disabled value="">Pilih Kelas</option>
         <?php foreach ($kelas as $c): ?>
           <option value="<?= $c->id_kelas ?>"><?= $c->kelas ?></option>
         <?php endforeach; ?>
@@ -248,9 +253,68 @@
             </div>
           </div>
 
-          <div class="relative">
-            <input type="file" name="file" accept=".xls,.xlsx" required class="block w-full text-sm text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900/20 dark:file:text-primary-300">
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Format file: XLS, XLSX</p>
+          <div class="space-y-4">
+            <div class="relative">
+              <input type="file" name="file" accept=".xls,.xlsx" required 
+                class="block w-full text-sm text-gray-900 dark:text-white 
+                file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
+                file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 
+                hover:file:bg-primary-100 dark:file:bg-primary-900/20 dark:file:text-primary-300">
+            </div>
+            
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+              <a href="#" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                <i class="fas fa-download mr-1"></i>
+                Download Template Excel
+              </a>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-sm">
+              <h4 class="font-medium text-gray-900 dark:text-white mb-2">Format Excel:</h4>
+              <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+                <li>Nama</li>
+                <li>Kelas (contoh: X TKJ 1)</li>
+                <li>Jurusan (kode: RPL/TKJ/MM/dll)</li>
+                <li>No. Absen</li>
+                <li>NIS</li>
+                <li>NISN</li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="upload-progress" class="hidden space-y-4">
+            <div class="relative pt-1">
+              <div class="flex mb-2 items-center justify-between">
+                <div>
+                  <span class="text-xs font-semibold inline-block text-primary-600 dark:text-primary-400">
+                    Progress Upload
+                  </span>
+                </div>
+                <div class="text-right">
+                  <span id="progress-percentage" class="text-xs font-semibold inline-block text-primary-600 dark:text-primary-400">
+                    0%
+                  </span>
+                </div>
+              </div>
+              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-primary-200 dark:bg-primary-900/20">
+                <div id="progress-bar" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="upload-result" class="hidden">
+            <div class="rounded-lg border dark:border-gray-700 overflow-hidden">
+              <div class="p-4 bg-gray-50 dark:bg-gray-700/50 border-b dark:border-gray-700">
+                <h4 class="font-medium text-gray-900 dark:text-white">Hasil Upload</h4>
+              </div>
+              <div class="p-4 space-y-3">
+                <div id="success-message" class="text-sm text-green-600 dark:text-green-400"></div>
+                <div id="error-container" class="hidden">
+                  <div class="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Error ditemukan:</div>
+                  <ul id="error-list" class="text-sm text-red-600 dark:text-red-400 list-disc list-inside space-y-1"></ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -259,12 +323,98 @@
             <i class="fas fa-times mr-2"></i>
             Batal
           </button>
-          <button type="submit" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 rounded-lg text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
+          <button type="submit" id="upload-button" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 rounded-lg text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
             <i class="fas fa-upload mr-2"></i>
             Upload
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+
+<div id="export-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 backdrop-blur-sm transition-opacity"></div>
+
+  <div class="flex min-h-screen items-center justify-center p-4">
+    <div class="relative w-full max-w-lg transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-2xl transition-all animate__animated animate__fadeInUp animate__faster">
+      <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <i class="fas fa-file-export mr-2 text-primary-500"></i>
+          Export Data
+        </h3>
+        <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-lg p-1" data-dismiss="modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Role yang akan diexport:</label>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="col-span-2">
+              <input type="radio" id="export-role-all" name="export_role" value="" class="hidden peer" checked>
+              <label for="export-role-all" class="flex items-center justify-center px-4 py-3 border-2 border-primary-500 text-primary-500 rounded-lg peer-checked:bg-primary-500 peer-checked:text-white cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200">
+                <i class="fas fa-users mr-2"></i>
+                Semua Pengguna
+              </label>
+            </div>
+            <?php foreach ($roles as $r): ?>
+            <div>
+              <input type="radio" id="export-role-<?= $r->id_role ?>" name="export_role" value="<?= $r->id_role ?>" class="hidden peer">
+              <label for="export-role-<?= $r->id_role ?>" class="flex items-center justify-center px-4 py-3 border-2 border-primary-500 text-primary-500 rounded-lg peer-checked:bg-primary-500 peer-checked:text-white cursor-pointer hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200">
+                <i class="fas <?= $r->id_role == 1 ? 'fa-user-graduate' : ($r->id_role == 2 ? 'fa-chalkboard-teacher' : 'fa-user-shield') ?> mr-2"></i>
+                <?= $r->name_role ?>
+              </label>
+            </div>
+            <?php endforeach; ?>
+          </div>
+        </div>
+
+        <div id="export-class-section" class="space-y-3 hidden">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pilih Kelas (opsional):</label>
+          <select id="export-class" class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200">
+            <option value="">Semua Kelas</option>
+            <?php foreach ($kelas as $k): ?>
+              <option value="<?= $k->id_kelas ?>"><?= $k->kelas ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+          <h4 class="font-medium text-gray-900 dark:text-white mb-2">Informasi Export:</h4>
+          <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <p id="export-info-siswa" class="hidden">
+              <i class="fas fa-info-circle mr-1"></i>
+              Data siswa akan mencakup: Nama, Kelas, Jurusan, No. Absen, NIS, dan NISN
+            </p>
+            <p id="export-info-guru" class="hidden">
+              <i class="fas fa-info-circle mr-1"></i>
+              Data guru akan mencakup: Nama, NIP, dan Email
+            </p>
+            <p id="export-info-admin" class="hidden">
+              <i class="fas fa-info-circle mr-1"></i>
+              Data admin akan mencakup: Nama dan Email
+            </p>
+            <p id="export-info-all" class="hidden">
+              <i class="fas fa-info-circle mr-1"></i>
+              Data akan mencakup: Nama, Role, Email, Kelas, dan Jurusan
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-700/50">
+        <button type="button" class="inline-flex items-center px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200" data-dismiss="modal">
+          <i class="fas fa-times mr-2"></i>
+          Batal
+        </button>
+        <button type="button" onclick="startExport()" id="start-export" class="inline-flex items-center px-4 py-2 border-2 border-primary-500 rounded-lg text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200">
+          <i class="fas fa-file-export mr-2"></i>
+          Export Excel
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -293,7 +443,7 @@
         
         <div class="relative">
             <select name="id_kelas" required
-                    class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-transparent border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary-500 peer transition-colors duration-200">
+                    class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-transparent border-2 border-gray-300 dark:border-white-600 rounded-lg focus:outline-none focus:border-primary-500 peer transition-colors duration-200">
                 <option value="" disabled selected>Pilih Kelas</option>
                 <?php foreach ($kelas as $k): ?>
                     <option value="<?= $k->id_kelas ?>"><?= $k->kelas ?></option>
@@ -307,7 +457,7 @@
         
         <div class="relative">
             <select name="kode_jurusan" required
-                    class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-transparent border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary-500 peer transition-colors duration-200">
+                    class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-transparent border-2 border-gray-300 dark:border-white-600 rounded-lg focus:outline-none focus:border-primary-500 peer transition-colors duration-200">
                 <option value="" disabled selected>Pilih Jurusan</option>
                 <?php foreach ($jurusan as $j): ?>
                     <option value="<?= $j->kode_jurusan ?>">[<?= $j->kode_jurusan ?>] <?= $j->nama_jurusan ?></option>
@@ -677,14 +827,14 @@
     expandForm.html('');
 
     switch (role_id) {
-      case "1": // Siswa
+      case "1": 
         expandForm.html(`
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
                         <div class="relative">
                             <select name="id_kelas" required class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-transparent border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary-500 peer transition-colors duration-200">
-                                <option value="" disabled selected>Pilih Kelas</option>
+                                <option value="" disabled selected class="bg-transparent">Pilih Kelas</option>
                                 <?php foreach ($kelas as $k): ?>
                                     <option value="<?= $k->id_kelas ?>"><?= $k->kelas ?></option>
                                 <?php endforeach; ?>
@@ -904,6 +1054,25 @@
     e.preventDefault();
 
     const formData = new FormData(e.target);
+    const uploadButton = $('#upload-button');
+    const progressDiv = $('#upload-progress');
+    const resultDiv = $('#upload-result');
+    const successMessage = $('#success-message');
+    const errorContainer = $('#error-container');
+    const errorList = $('#error-list');
+    const progressBar = $('#progress-bar');
+    const progressPercentage = $('#progress-percentage');
+
+
+    progressDiv.removeClass('hidden');
+    resultDiv.addClass('hidden');
+    errorContainer.addClass('hidden');
+    errorList.empty();
+    progressBar.css('width', '0%');
+    progressPercentage.text('0%');
+
+    uploadButton.prop('disabled', true);
+    uploadButton.html('<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...');
 
     $.ajax({
       url: '<?= admin_url('api/add-users-xls') ?>',
@@ -911,57 +1080,155 @@
       data: formData,
       processData: false,
       contentType: false,
-      beforeSend: function() {
-        $('.btn').attr('disabled', true);
-        loading.removeClass("hidden");
-      },
-      complete: function() {
-        loading.addClass("hidden");
-        $('.btn').attr('disabled', false);
+      xhr: function() {
+        const xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function(evt) {
+          if (evt.lengthComputable) {
+            const percentComplete = Math.round((evt.loaded / evt.total) * 100);
+            progressBar.css('width', percentComplete + '%');
+            progressPercentage.text(percentComplete + '%');
+          }
+        }, false);
+        return xhr;
       },
       success: function(response) {
+        resultDiv.removeClass('hidden');
+          
+        successMessage.html(`<i class="fas fa-check-circle mr-1"></i>${response.success_count} data berhasil diupload`);
+        
+        // Tampilkan error jika ada
         if (response.errors && response.errors.length > 0) {
-          // Tampilkan warning jika ada error partial
-          let errorMsg = response.message + "\n\nDetail error:\n" + response.errors.join("\n");
+          errorContainer.removeClass('hidden');
+          response.errors.forEach(error => {
+            errorList.append(`<li>${error}</li>`);
+          });
+        }
+
+        // Jika partial success, tampilkan notifikasi
+        if (response.status === 'partial') {
           Swal.fire({
             icon: 'warning',
-            title: 'Perhatian',
-            text: errorMsg,
+            title: 'Upload Selesai dengan Warning',
+            text: response.message,
+            confirmButtonText: 'OK'
           });
         } else {
           Swal.fire({
             icon: 'success',
-            title: 'Berhasil',
+            title: 'Upload Berhasil',
             text: response.message,
+            confirmButtonText: 'OK'
           });
         }
-        closeModal($('#upload-modal'));
+
+        // Refresh tabel setelah upload
         requestBackend();
       },
-      error: function(xhr, status, error) {
-        let errorMsg = "Gagal mengupload file";
+      error: function(xhr) {
+        resultDiv.removeClass('hidden');
+        errorContainer.removeClass('hidden');
+        
+        let errorMessage = 'Terjadi kesalahan saat upload file';
+        try {
+          const response = JSON.parse(xhr.responseText);
+          errorMessage = response.message || errorMessage;
+        } catch (e) {}
 
-        // try {
-        //   // Coba parse response JSON jika ada
-        //   const response = xhr.responseJSON || JSON.parse(xhr.responseText);
-        //   if (response && response.message) {
-        //     errorMsg = response.message;
-        //     if (response.errors) {
-        //       errorMsg += "\n\nDetail error:\n" + response.errors.join("\n");
-        //     }
-        //   }
-        // } catch (e) {
-        //   // Jika gagal parse JSON, gunakan error message default
-        //   errorMsg = error || "Terjadi kesalahan pada server";
-        // }
+        errorList.append(`<li>${errorMessage}</li>`);
 
-        // Swal.fire({
-        //   icon: 'error',
-        //   title: 'Error',
-        //   text: errorMsg,
-        // });
+        Swal.fire({
+          icon: 'error',
+          title: 'Upload Gagal',
+          text: errorMessage,
+          confirmButtonText: 'OK'
+        });
+      },
+      complete: function() {
+        // Reset button state
+        uploadButton.prop('disabled', false);
+        uploadButton.html('<i class="fas fa-upload mr-2"></i>Upload');
       }
     });
+  }
+
+  function openExportModal() {
+    $('#export-modal').removeClass('hidden');
+    updateExportInfo();
+  }
+
+  function updateExportInfo() {
+    const selectedRole = $('input[name="export_role"]:checked').val();
+    
+    // Sembunyikan semua info
+    $('#export-info-siswa, #export-info-guru, #export-info-admin, #export-info-all').addClass('hidden');
+    
+    // Tampilkan info yang sesuai
+    if (selectedRole === '1') {
+      $('#export-info-siswa').removeClass('hidden');
+      $('#export-class-section').removeClass('hidden');
+    } else if (selectedRole === '2') {
+      $('#export-info-guru').removeClass('hidden');
+      $('#export-class-section').addClass('hidden');
+    } else if (selectedRole === '3') {
+      $('#export-info-admin').removeClass('hidden');
+      $('#export-class-section').addClass('hidden');
+    } else {
+      $('#export-info-all').removeClass('hidden');
+      $('#export-class-section').addClass('hidden');
+    }
+  }
+
+  function startExport() {
+    const role = $('input[name="export_role"]:checked').val();
+    const kelas = role === '1' ? $('#export-class').val() : '';
+    
+    // Tampilkan loading state
+    const exportBtn = $('#start-export');
+    exportBtn.prop('disabled', true);
+    exportBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Exporting...');
+
+    // Buat URL dengan query parameters
+    let url = '<?= admin_url('api/export-users-xls') ?>';
+    const params = new URLSearchParams();
+    
+    if (role) params.append('role', role);
+    if (kelas) params.append('kelas', kelas);
+    
+    if (params.toString()) {
+      url += '?' + params.toString();
+    }
+
+    // Download file
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        // Buat link untuk download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `users_export_${new Date().toISOString().slice(0,10)}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        
+        // Reset button state dan tutup modal
+        exportBtn.prop('disabled', false);
+        exportBtn.html('<i class="fas fa-file-export mr-2"></i>Export Excel');
+        $('#export-modal').addClass('hidden');
+      })
+      .catch(error => {
+        console.error('Export failed:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Export Gagal',
+          text: 'Terjadi kesalahan saat mengexport data',
+          confirmButtonText: 'OK'
+        });
+        
+        // Reset button state
+        exportBtn.prop('disabled', false);
+        exportBtn.html('<i class="fas fa-file-export mr-2"></i>Export Excel');
+      });
   }
 </script>
 
