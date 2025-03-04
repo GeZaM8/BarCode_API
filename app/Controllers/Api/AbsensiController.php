@@ -107,4 +107,16 @@ class AbsensiController extends BaseController
         }
         return $this->respond(["messages" => "Anda berhasil melakukan this->absensiModel"]);
     }
+    
+    public function getLeaderboard($sortBy = "kehadiran")
+    {
+        $allowedSort = ["kehadiran", "kecepatan"];
+        if (!in_array($sortBy, $allowedSort)) {
+            return $this->fail("Data tidak ditemukan");
+        }
+
+        $data = $this->absensiModel->getLeaderboard($sortBy);
+
+        return $this->respond($data);
+    }
 }

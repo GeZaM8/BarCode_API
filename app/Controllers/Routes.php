@@ -35,6 +35,8 @@ $routes->group('/', ['filter' => "api"], static function (RouteCollection $route
     $routes->get("/absensi/(:num)/(:num)", [[AbsensiController::class, "getAbsensi"], '$1/$2']);
     $routes->get("/absensi/(:num)", [[AbsensiController::class, "getAbsensi"], '$1']);
     $routes->get("/absensi", [AbsensiController::class, "getAbsensi"]);
+    $routes->get("/leaderboard", [AbsensiController::class, "getLeaderboard"]);
+    $routes->get("/leaderboard/(:segment)", [[AbsensiController::class, "getLeaderboard"], '$1']);
 
     $routes->get("/siswa/(:num)", [[SiswaController::class, "getSiswa"], '$1']);
     $routes->post("/update/siswa", [SiswaController::class, "updateSiswa"]);

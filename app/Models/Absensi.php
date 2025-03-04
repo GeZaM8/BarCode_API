@@ -51,4 +51,22 @@ class Absensi extends Model
             ->join('u_siswa us', 'us.id_user = absensi.id_user', 'left')
             ->join('kelas k', 'k.id_kelas = us.id_kelas', 'left');
     }
+
+    public function getLeaderBoard($sortBy = "kehadiran") 
+    {
+        $orderColumn = ($sortBy === "kecepatan") ? "kecepatan_persen" : "kehadiran_persen";
+
+        return $this
+            ->select("
+                absensi.id_user,
+                us.nama,
+                ROUND((COUNT(absensi.id_user) / (SELECT COUNT(DISTINCT tanggal) FROM absensi)) * 100, 2) AS kehadiran_persen,
+                ROUND((SUM(CASE WHEN status = 'hadir' THEN 1 ELSE 0 END) / COUNT(absensi.id_user)) * 100, 2) AS kecepatan_persen
+            ")
+            ->join("u_siswa us", "us.id_user = absensi.id_user", "left")
+            ->groupBy("absensi.id_user")
+            ->orderBy($orderColumn, "DESC")
+            ->limit(10)
+            ->findAll();
+    }
 }
