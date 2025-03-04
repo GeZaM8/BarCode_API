@@ -58,8 +58,7 @@ class Absensi extends Model
 
         return $this
             ->select("
-                absensi.id_user,
-                us.nama,
+                absensi.id_user, us.nama, us.foto,
                 ROUND((COUNT(absensi.id_user) / (SELECT COUNT(DISTINCT tanggal) FROM absensi)) * 100, 2) AS kehadiran_persen,
                 ROUND((SUM(CASE WHEN status = 'hadir' THEN 1 ELSE 0 END) / COUNT(absensi.id_user)) * 100, 2) AS kecepatan_persen
             ")

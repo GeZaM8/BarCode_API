@@ -117,6 +117,11 @@ class AbsensiController extends BaseController
 
         $data = $this->absensiModel->getLeaderboard($sortBy);
 
+        array_map(function ($item) {
+            $item->foto = base_url("assets/upload/profile/" . $item->foto);
+            return $item;
+        }, $data);
+
         return $this->respond($data);
     }
 }
